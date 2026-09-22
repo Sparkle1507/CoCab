@@ -19,15 +19,15 @@ import 'dart:html' as html;
 bool isFirebaseWorking = false;
 
 // ==========================================
-// 🎨 1. CORE THEME & CONSTANTS
+// 🎨 1. CORE THEME & CONSTANTS (Polished)
 // ==========================================
-const Color kPremiumBlack = Color(0xFF161616);
-const Color kPremiumIndigo = Color(0xFF4F46E5);
-const Color kPremiumGreen = Color(0xFF10B981);
-const Color kBackgroundLight = Color(0xFFF7F8FA);
+const Color kPremiumBlack = Color(0xFF121826);
+const Color kPremiumIndigo = Color(0xFF5B5CEB);
+const Color kPremiumGreen = Color(0xFF17B978);
+const Color kBackgroundLight = Color(0xFFF4F6FA);
 const Color kCardWhite = Color(0xFFFFFFFF);
-const Color kTextGrey = Color(0xFF6B7280);
-const Color kBorderGrey = Color(0xFFE5E7EB);
+const Color kTextGrey = Color(0xFF667085);
+const Color kBorderGrey = Color(0xFFE3E7EF);
 
 // ==========================================
 // 🧠 2. NATIVE STATE MANAGEMENT
@@ -111,14 +111,52 @@ class CabApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'CoCab Premium',
           theme: ThemeData(
-            primaryColor: kPremiumIndigo,
-            scaffoldBackgroundColor: kBackgroundLight, 
-            fontFamily: 'Roboto', 
-            appBarTheme: const AppBarTheme(
-              elevation: 0, backgroundColor: kBackgroundLight, foregroundColor: kPremiumBlack,
-              centerTitle: false, systemOverlayStyle: SystemUiOverlayStyle.dark,
-            ),
-          ),
+             useMaterial3: true,
+             primaryColor: kPremiumIndigo,
+             scaffoldBackgroundColor: kBackgroundLight,
+             fontFamily: 'Roboto',
+             colorScheme: ColorScheme.fromSeed(seedColor: kPremiumIndigo, brightness: Brightness.light),
+             appBarTheme: const AppBarTheme(
+               elevation: 0,
+               scrolledUnderElevation: 0,
+               backgroundColor: kBackgroundLight,
+               foregroundColor: kPremiumBlack,
+               centerTitle: false,
+               surfaceTintColor: Colors.transparent,
+               systemOverlayStyle: SystemUiOverlayStyle.dark,
+               titleTextStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: kPremiumBlack, letterSpacing: -0.6),
+             ),
+             inputDecorationTheme: const InputDecorationTheme(
+               filled: true,
+               fillColor: Colors.white,
+               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(18)), borderSide: BorderSide.none),
+               enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(18)), borderSide: BorderSide(color: kBorderGrey)),
+               focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(18)), borderSide: BorderSide(color: kPremiumIndigo, width: 1.6)),
+               contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+             ),
+             elevatedButtonTheme: ElevatedButtonThemeData(
+               style: ElevatedButton.styleFrom(
+                 elevation: 0,
+                 minimumSize: const Size(double.infinity, 54),
+                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
+                 textStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+               ),
+             ),
+             outlinedButtonTheme: OutlinedButtonThemeData(
+               style: OutlinedButton.styleFrom(
+                 minimumSize: const Size(double.infinity, 52),
+                 side: const BorderSide(color: kBorderGrey),
+                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
+                 textStyle: const TextStyle(fontWeight: FontWeight.w800),
+               ),
+             ),
+             snackBarTheme: SnackBarThemeData(
+               behavior: SnackBarBehavior.floating,
+               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+               backgroundColor: kPremiumBlack,
+               contentTextStyle: const TextStyle(fontWeight: FontWeight.w700),
+             ),
+           ),
           home: isLoggedIn ? const MainNavigationScreen() : const LoginScreen(),
         );
       }
@@ -145,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
     await Future.delayed(const Duration(seconds: 1));
     setState(() => _isLoading = false);
-    if(mounted) Navigator.push(context, MaterialPageRoute(builder: (context) => OtpScreen(phone: phoneNumber)));
+    if (mounted) Navigator.push(context, MaterialPageRoute(builder: (context) => OtpScreen(phone: phoneNumber)));
   }
 
   @override
@@ -154,45 +192,85 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: kPremiumBlack,
       body: Stack(
         children: [
-          Positioned(top: -100, left: -100, child: ImageFiltered(imageFilter: ImageFilter.blur(sigmaX: 80, sigmaY: 80), child: Container(width: 300, height: 300, decoration: BoxDecoration(shape: BoxShape.circle, color: kPremiumIndigo.withOpacity(0.2))))),
+          Positioned(
+            top: -120, right: -80, 
+            child: Container(width: 280, height: 280, decoration: BoxDecoration(shape: BoxShape.circle, color: kPremiumIndigo.withOpacity(0.28)))
+          ),
+          Positioned(
+            bottom: -140, left: -80, 
+            child: Container(width: 300, height: 300, decoration: BoxDecoration(shape: BoxShape.circle, color: kPremiumGreen.withOpacity(0.10)))
+          ),
           SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(24)), child: const Icon(Icons.local_taxi_rounded, size: 48, color: Colors.white)),
-                    const SizedBox(height: 32),
-                    const Text('CoCab.', style: TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: -1.5)),
-                    const SizedBox(height: 8),
-                    Text('Premium rides,\nShared smartly.', style: TextStyle(fontSize: 20, color: Colors.white.withOpacity(0.7), height: 1.3, letterSpacing: -0.5, fontWeight: FontWeight.w500)),
-                    const SizedBox(height: 56),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(children: [
                     Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(color: const Color(0xFF1C1C1E), borderRadius: BorderRadius.circular(32), border: Border.all(color: Colors.white.withOpacity(0.05))),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TextField(
-                            controller: _phoneController, keyboardType: TextInputType.phone, maxLength: 10,
-                            style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600, letterSpacing: 1),
-                            decoration: InputDecoration(counterText: '', prefixText: '+91  ', prefixStyle: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 18, fontWeight: FontWeight.w600), filled: true, fillColor: Colors.white.withOpacity(0.05), hintText: '00000 00000', hintStyle: TextStyle(color: Colors.white.withOpacity(0.2), fontWeight: FontWeight.w600, letterSpacing: 2), border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none), contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20)),
-                          ),
-                          const SizedBox(height: 24),
-                          SizedBox(
-                            height: 60,
-                            child: ElevatedButton(
-                              onPressed: _isLoading ? null : _sendOtp,
-                              style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: kPremiumBlack, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-                              child: _isLoading ? const CircularProgressIndicator(color: kPremiumBlack) : const Text('Continue', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
-                            ),
-                          ),
-                        ],
-                      ),
+                      width: 54, height: 54, 
+                      decoration: BoxDecoration(color: Colors.white.withOpacity(0.10), borderRadius: BorderRadius.circular(18), border: Border.all(color: Colors.white.withOpacity(0.10))), 
+                      child: const Icon(Icons.local_taxi_rounded, color: Colors.white, size: 30)
                     ),
-                  ],
-                ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), 
+                      decoration: BoxDecoration(color: Colors.white.withOpacity(0.07), borderRadius: BorderRadius.circular(20)), 
+                      child: const Row(children: [
+                        Icon(Icons.shield_outlined, size: 15, color: kPremiumGreen), 
+                        SizedBox(width: 6), 
+                        Text('Safe & smart', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700, fontSize: 11))
+                      ])
+                    )
+                  ]),
+                  const SizedBox(height: 54),
+                  const Text('Ride better.', style: TextStyle(color: Colors.white, fontSize: 42, fontWeight: FontWeight.w900, letterSpacing: -1.8)),
+                  const SizedBox(height: 6),
+                  Text('Premium rides,\nshared smartly.', style: TextStyle(color: Colors.white.withOpacity(0.66), fontSize: 20, height: 1.25, fontWeight: FontWeight.w500)),
+                  const SizedBox(height: 42),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.075), borderRadius: BorderRadius.circular(28), border: Border.all(color: Colors.white.withOpacity(0.08))),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start, 
+                      children: [
+                        const Text('Enter your mobile number', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800)),
+                        const SizedBox(height: 12),
+                        TextField(
+                          controller: _phoneController,
+                          keyboardType: TextInputType.phone,
+                          maxLength: 10,
+                          style: const TextStyle(fontSize: 19, color: Colors.white, fontWeight: FontWeight.w700, letterSpacing: 1),
+                          decoration: InputDecoration(
+                            counterText: '', 
+                            prefixText: '+91  ', 
+                            prefixStyle: TextStyle(color: Colors.white.withOpacity(0.55), fontSize: 18, fontWeight: FontWeight.w700), 
+                            hintText: '00000 00000', 
+                            hintStyle: TextStyle(color: Colors.white.withOpacity(0.25), fontWeight: FontWeight.w600, letterSpacing: 2), 
+                            filled: true, 
+                            fillColor: Colors.white.withOpacity(0.06), 
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(18), borderSide: BorderSide.none), 
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18)
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          height: 58, 
+                          width: double.infinity, 
+                          child: ElevatedButton(
+                            onPressed: _isLoading ? null : _sendOtp, 
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: kPremiumBlack, disabledBackgroundColor: Colors.white24), 
+                            child: _isLoading 
+                              ? const SizedBox(width: 23, height: 23, child: CircularProgressIndicator(strokeWidth: 2.5, color: kPremiumBlack)) 
+                              : const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('Continue', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900)), SizedBox(width: 8), Icon(Icons.arrow_forward_rounded, size: 20)])
+                          )
+                        ),
+                      ]
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Center(child: Text('By continuing, you agree to CoCab\'s terms & privacy policy.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white.withOpacity(0.38), fontSize: 11, height: 1.4))),
+                ],
               ),
             ),
           ),
@@ -211,37 +289,40 @@ class OtpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPremiumBlack,
-      appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0, iconTheme: const IconThemeData(color: Colors.white)),
+      appBar: AppBar(backgroundColor: Colors.transparent, foregroundColor: Colors.white, surfaceTintColor: Colors.transparent),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text('Verify', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: -1.5)),
-              const SizedBox(height: 8),
-              Text('Code sent to +91 $phone', style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.6), fontWeight: FontWeight.w500)),
-              const SizedBox(height: 48),
-              TextField(
-                controller: _otpController, keyboardType: TextInputType.number, maxLength: 6, textAlign: TextAlign.center, autofocus: true,
-                style: const TextStyle(fontSize: 32, letterSpacing: 24, color: Colors.white, fontWeight: FontWeight.bold),
-                decoration: InputDecoration(hintText: '••••••', hintStyle: TextStyle(color: Colors.white.withOpacity(0.1), letterSpacing: 24), counterText: '', filled: true, fillColor: Colors.white.withOpacity(0.05), border: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: BorderSide.none), contentPadding: const EdgeInsets.symmetric(vertical: 24)),
-              ),
-              const SizedBox(height: 32),
-              SizedBox(
-                height: 60,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await AppState.login(phone);
-                    Navigator.pop(context); 
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: kPremiumBlack, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-                  child: const Text('Confirm', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: -0.5)),
-                ),
-              ),
-            ],
-          ),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            const Spacer(),
+            Container(width: 68, height: 68, alignment: Alignment.center, decoration: BoxDecoration(color: kPremiumIndigo.withOpacity(0.18), borderRadius: BorderRadius.circular(22)), child: const Icon(Icons.verified_user_rounded, color: Colors.white, size: 34)),
+            const SizedBox(height: 28),
+            const Text('Verify your number', style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: -1.2)),
+            const SizedBox(height: 8),
+            Text('Enter the 6-digit code sent to +91 $phone', style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.58), fontWeight: FontWeight.w500)),
+            const SizedBox(height: 28),
+            TextField(
+              controller: _otpController, 
+              keyboardType: TextInputType.number, 
+              maxLength: 6, 
+              textAlign: TextAlign.center, 
+              autofocus: true, 
+              style: const TextStyle(fontSize: 26, letterSpacing: 14, color: Colors.white, fontWeight: FontWeight.w800), 
+              decoration: InputDecoration(counterText: '', filled: true, fillColor: Colors.white.withOpacity(0.07), hintText: '••••••', hintStyle: TextStyle(color: Colors.white.withOpacity(0.16), letterSpacing: 14), border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none), contentPadding: const EdgeInsets.symmetric(vertical: 22))
+            ),
+            const SizedBox(height: 18),
+            SizedBox(
+              height: 56, 
+              child: ElevatedButton(
+                onPressed: () async { await AppState.login(phone); Navigator.pop(context); }, 
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: kPremiumBlack), 
+                child: const Text('Confirm & Continue', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16))
+              )
+            ),
+            const SizedBox(height: 14),
+            TextButton(onPressed: () {}, child: Text('Didn\'t receive a code?', style: TextStyle(color: Colors.white.withOpacity(0.6), fontWeight: FontWeight.w700))),
+            const Spacer(),
+          ]),
         ),
       ),
     );
@@ -264,28 +345,50 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: _screens[_currentIndex],
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(color: kCardWhite, boxShadow: [BoxShadow(color: kPremiumBlack.withOpacity(0.04), blurRadius: 24, offset: const Offset(0, -8))]),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
+          child: Container(
+            padding: const EdgeInsets.all(7),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.96), 
+              borderRadius: BorderRadius.circular(24), 
+              boxShadow: [BoxShadow(color: kPremiumBlack.withOpacity(0.10), blurRadius: 28, offset: const Offset(0, 10))], 
+              border: Border.all(color: Colors.white)
+            ),
             child: BottomNavigationBar(
-              currentIndex: _currentIndex, onTap: (index) => setState(() => _currentIndex = index),
-              type: BottomNavigationBarType.fixed, backgroundColor: kCardWhite, elevation: 0,
-              selectedItemColor: kPremiumBlack, unselectedItemColor: kTextGrey.withOpacity(0.5),
-              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 11),
-              unselectedLabelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
-              items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Ride'),
-                BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'Services'),
-                BottomNavigationBarItem(icon: Icon(Icons.flight_takeoff_rounded), label: 'Travel'),
-                BottomNavigationBarItem(icon: Icon(Icons.person_rounded), label: 'Account'),
+              currentIndex: _currentIndex,
+              onTap: (index) => setState(() => _currentIndex = index),
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              selectedItemColor: kPremiumBlack,
+              unselectedItemColor: kTextGrey,
+              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 11),
+              unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 11),
+              showUnselectedLabels: true,
+              items: [
+                BottomNavigationBarItem(icon: _navIcon(Icons.home_filled, 0), label: 'Ride'),
+                BottomNavigationBarItem(icon: _navIcon(Icons.grid_view_rounded, 1), label: 'Services'),
+                BottomNavigationBarItem(icon: _navIcon(Icons.flight_takeoff_rounded, 2), label: 'Travel'),
+                BottomNavigationBarItem(icon: _navIcon(Icons.person_rounded, 3), label: 'Account'),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _navIcon(IconData icon, int index) {
+    final selected = _currentIndex == index;
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 220), 
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8), 
+      decoration: BoxDecoration(color: selected ? kPremiumBlack : Colors.transparent, borderRadius: BorderRadius.circular(16)), 
+      child: Icon(icon, color: selected ? Colors.white : kTextGrey, size: 21)
     );
   }
 }
@@ -323,7 +426,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() { _debounce?.cancel(); _bannerTimer?.cancel(); _bannerController.dispose(); super.dispose(); }
 
-  // Added vehicleType parameter to receive the selected ride icon
   Future<void> _fetchRouteAndShowVehicles(String placeName, LatLng dropLatLng, {String? vehicleType}) async {
     final locState = LocationState.current.value;
     showDialog(context: context, barrierDismissible: false, builder: (c) => Center(child: Container(padding: const EdgeInsets.all(24), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)), child: const CircularProgressIndicator(color: kPremiumBlack))));
@@ -342,116 +444,26 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Added logic to set selectedIndex based on clicked icon
   void _showExactOlaBottomSheet(String destination, LatLng dropLatLng, var baseData, {String? vehicleType}) {
     int baseFare = baseData["solo_fare"] ?? 300;
 
     final List<Map<String, dynamic>> rides = [
-      {
-        "title": "Book Any",
-        "subtitle": "Mini, Prime Sedan, Prime Plus",
-        "eta": "1 min",
-        "priceText": "₹${(baseFare * 0.95).round()} - ₹${(baseFare * 1.35).round()}",
-        "singlePrice": baseFare,
-        "img": "https://cdn-icons-png.flaticon.com/512/3097/3097180.png",
-        "isRange": true,
-      },
-      {
-        "title": "Auto",
-        "subtitle": "Quickest auto ride in town",
-        "eta": "1 min",
-        "priceText": "₹${(baseFare * 0.55).round()}",
-        "singlePrice": (baseFare * 0.55).round(),
-        "img": "https://cdn-icons-png.flaticon.com/512/1048/1048313.png",
-        "isRange": false,
-      },
-      {
-        "title": "Mini",
-        "subtitle": "Comfortable, economical hatchbacks",
-        "eta": "2 mins",
-        "priceText": "₹$baseFare",
-        "singlePrice": baseFare,
-        "img": "https://cdn-icons-png.flaticon.com/512/3725/3725112.png",
-        "isRange": false,
-      },
-      {
-        "title": "Bike",
-        "subtitle": "Beat the traffic",
-        "eta": "1 min",
-        "priceText": "₹${(baseFare * 0.35).round()}",
-        "singlePrice": (baseFare * 0.35).round(),
-        "img": "https://cdn-icons-png.flaticon.com/512/3753/3753264.png",
-        "isRange": false,
-      },
-      {
-        "title": "Prime SUV",
-        "subtitle": "Spacious 6-seaters",
-        "eta": "4 mins",
-        "priceText": "₹${(baseFare * 1.7).round()}",
-        "singlePrice": (baseFare * 1.7).round(),
-        "img": "https://cdn-icons-png.flaticon.com/512/3204/3204066.png",
-        "isRange": false,
-      },
-      {
-        "title": "Prime Sedan",
-        "subtitle": "Spacious sedans with top partners",
-        "eta": "3 mins",
-        "priceText": "₹${(baseFare * 1.25).round()}",
-        "singlePrice": (baseFare * 1.25).round(),
-        "img": "https://cdn-icons-png.flaticon.com/512/3097/3097180.png",
-        "isRange": false,
-      },
-      {
-        "title": "Prime Plus",
-        "subtitle": "Top rated drivers, zero cancellations",
-        "eta": "3 mins",
-        "priceText": "₹${(baseFare * 1.5).round()}",
-        "singlePrice": (baseFare * 1.5).round(),
-        "img": "https://cdn-icons-png.flaticon.com/512/3204/3204066.png",
-        "isRange": false,
-      },
-      {
-        "title": "Mini Non AC",
-        "subtitle": "Pocket-friendly rides",
-        "eta": "2 mins",
-        "priceText": "₹${(baseFare * 0.85).round()}",
-        "singlePrice": (baseFare * 0.85).round(),
-        "img": "https://cdn-icons-png.flaticon.com/512/3725/3725112.png",
-        "isRange": false,
-      },
-      {
-        "title": "Parcel",
-        "subtitle": "Send packages across the city",
-        "eta": "5 mins",
-        "priceText": "₹${(baseFare * 0.4).round()}",
-        "singlePrice": (baseFare * 0.4).round(),
-        "img": "https://cdn-icons-png.flaticon.com/512/2769/2769339.png",
-        "isRange": false,
-      },
-      {
-        "title": "Laundry",
-        "subtitle": "Doorstep pickup & drop",
-        "eta": "30 mins",
-        "priceText": "₹${(baseFare * 0.6).round()}",
-        "singlePrice": (baseFare * 0.6).round(),
-        "img": "https://cdn-icons-png.flaticon.com/512/3003/3003984.png",
-        "isRange": false,
-      },
-      {
-        "title": "Rental",
-        "subtitle": "Hourly rentals for city tours",
-        "eta": "5 mins",
-        "priceText": "", 
-        "singlePrice": 0,
-        "img": "https://cdn-icons-png.flaticon.com/512/2830/2830305.png",
-        "isRange": false,
-      },
+      {"title":"Book Any","subtitle":"Mini, Prime Sedan, Prime Plus","eta":"1 min","priceText":"₹${(baseFare * 0.95).round()} - ₹${(baseFare * 1.35).round()}","singlePrice":baseFare,"img":"https://cdn-icons-png.flaticon.com/512/3097/3097180.png","isRange":true},
+      {"title":"Auto","subtitle":"Quickest auto ride in town","eta":"1 min","priceText":"₹${(baseFare * 0.55).round()}","singlePrice":(baseFare * 0.55).round(),"img":"https://cdn-icons-png.flaticon.com/512/1048/1048313.png","isRange":false},
+      {"title":"Mini","subtitle":"Comfortable, economical hatchbacks","eta":"2 mins","priceText":"₹$baseFare","singlePrice":baseFare,"img":"https://cdn-icons-png.flaticon.com/512/3725/3725112.png","isRange":false},
+      {"title":"Bike","subtitle":"Beat the traffic","eta":"1 min","priceText":"₹${(baseFare * 0.35).round()}","singlePrice":(baseFare * 0.35).round(),"img":"https://cdn-icons-png.flaticon.com/512/3753/3753264.png","isRange":false},
+      {"title":"Prime SUV","subtitle":"Spacious 6-seaters","eta":"4 mins","priceText":"₹${(baseFare * 1.7).round()}","singlePrice":(baseFare * 1.7).round(),"img":"https://cdn-icons-png.flaticon.com/512/3204/3204066.png","isRange":false},
+      {"title":"Prime Sedan","subtitle":"Spacious sedans with top partners","eta":"3 mins","priceText":"₹${(baseFare * 1.25).round()}","singlePrice":(baseFare * 1.25).round(),"img":"https://cdn-icons-png.flaticon.com/512/3097/3097180.png","isRange":false},
+      {"title":"Prime Plus","subtitle":"Top rated drivers, zero cancellations","eta":"3 mins","priceText":"₹${(baseFare * 1.5).round()}","singlePrice":(baseFare * 1.5).round(),"img":"https://cdn-icons-png.flaticon.com/512/3204/3204066.png","isRange":false},
+      {"title":"Mini Non AC","subtitle":"Pocket-friendly rides","eta":"2 mins","priceText":"₹${(baseFare * 0.85).round()}","singlePrice":(baseFare * 0.85).round(),"img":"https://cdn-icons-png.flaticon.com/512/3725/3725112.png","isRange":false},
+      {"title":"Parcel","subtitle":"Send packages across the city","eta":"5 mins","priceText":"₹${(baseFare * 0.4).round()}","singlePrice":(baseFare * 0.4).round(),"img":"https://cdn-icons-png.flaticon.com/512/2769/2769339.png","isRange":false},
+      {"title":"Laundry","subtitle":"Doorstep pickup & drop","eta":"30 mins","priceText":"₹${(baseFare * 0.6).round()}","singlePrice":(baseFare * 0.6).round(),"img":"https://cdn-icons-png.flaticon.com/512/3003/3003984.png","isRange":false},
+      {"title":"Rental","subtitle":"Hourly rentals for city tours","eta":"5 mins","priceText":"","singlePrice":0,"img":"https://cdn-icons-png.flaticon.com/512/2830/2830305.png","isRange":false},
     ];
 
-    // Find the correct index if vehicleType is passed
     int selectedIndex = 0;
     if (vehicleType != null) {
-      int foundIndex = rides.indexWhere((r) => r['title'] == vehicleType);
+      final foundIndex = rides.indexWhere((r) => r['title'] == vehicleType);
       if (foundIndex != -1) selectedIndex = foundIndex;
     }
 
@@ -460,169 +472,135 @@ class _HomeScreenState extends State<HomeScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
-        builder: (BuildContext context, StateSetter setSheetState) {
+        builder: (context, setSheetState) {
           final selectedRide = rides[selectedIndex];
-
           return Container(
+            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.88),
             decoration: const BoxDecoration(
               color: kCardWhite,
               borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
             ),
             child: SafeArea(
-              top: false,
+              top: false, 
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 10),
-                  Container(width: 44, height: 4, decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(4))),
-                  const SizedBox(height: 14),
-
+                  Container(width: 44, height: 5, decoration: BoxDecoration(color: kBorderGrey, borderRadius: BorderRadius.circular(10))),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    padding: const EdgeInsets.fromLTRB(20, 18, 20, 10), 
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start, 
                       children: [
-                        Column(
-                          children: [
-                            Container(width: 10, height: 10, decoration: const BoxDecoration(color: Color(0xFF22C55E), shape: BoxShape.circle)),
-                            Container(width: 2, height: 26, color: Colors.grey.shade300),
-                            Container(width: 10, height: 10, decoration: const BoxDecoration(color: Color(0xFFEF4444), shape: BoxShape.circle)),
-                          ],
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(LocationState.current.value.address, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: kPremiumBlack)),
-                              const SizedBox(height: 4),
-                              Divider(height: 1, thickness: 0.8, color: Colors.grey.shade200),
-                              const SizedBox(height: 4),
-                              Text(destination, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: kPremiumBlack)),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 10),
+                        const Text('Choose your ride', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, letterSpacing: -0.8)),
+                        const SizedBox(height: 10),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                          decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(12)),
-                          child: const Column(
+                          padding: const EdgeInsets.all(14), 
+                          decoration: BoxDecoration(color: kBackgroundLight, borderRadius: BorderRadius.circular(18)), 
+                          child: Row(
                             children: [
-                              Icon(Icons.access_time_filled_rounded, size: 18, color: kPremiumBlack),
-                              SizedBox(height: 2),
-                              Text("Now", style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: kPremiumBlack)),
-                            ],
-                          ),
+                              const Icon(Icons.route_rounded, color: kPremiumIndigo, size: 22), 
+                              const SizedBox(width: 10), 
+                              Expanded(child: Text(destination, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14))), 
+                              const Icon(Icons.chevron_right_rounded, color: kTextGrey)
+                            ]
+                          )
                         ),
-                      ],
-                    ),
+                      ]
+                    )
                   ),
-
-                  const SizedBox(height: 12),
-                  Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
-                  const SizedBox(height: 8),
-
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.42),
+                  Expanded(
                     child: ListView.builder(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: rides.length,
+                      padding: const EdgeInsets.fromLTRB(16, 2, 16, 12), 
+                      itemCount: rides.length, 
                       itemBuilder: (context, index) {
                         final item = rides[index];
-                        final bool isSelected = selectedIndex == index;
-
+                        final isSelected = selectedIndex == index;
                         return GestureDetector(
-                          onTap: () => setSheetState(() => selectedIndex = index),
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 4),
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          onTap: () => setSheetState(() => selectedIndex = index), 
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 180), 
+                            margin: const EdgeInsets.only(bottom: 9), 
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11), 
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFFF0FDF4) : kCardWhite,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: isSelected ? const Color(0xFF22C55E) : Colors.transparent,
-                                width: 1.5,
-                              ),
-                            ),
+                              color: isSelected ? kPremiumBlack : Colors.white, 
+                              borderRadius: BorderRadius.circular(20), 
+                              border: Border.all(color: isSelected ? kPremiumBlack : kBorderGrey.withOpacity(0.7)), 
+                              boxShadow: isSelected ? [BoxShadow(color: kPremiumBlack.withOpacity(0.14), blurRadius: 18, offset: const Offset(0, 7))] : []
+                            ), 
                             child: Row(
                               children: [
-                                Column(
-                                  children: [
-                                    Image.network(item["img"], width: 56, height: 42, fit: BoxFit.contain),
-                                    const SizedBox(height: 2),
-                                    Text(item["eta"], style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: kTextGrey)),
-                                  ],
-                                ),
-                                const SizedBox(width: 14),
+                                Container(
+                                  width: 68, height: 54, padding: const EdgeInsets.all(7), 
+                                  decoration: BoxDecoration(color: isSelected ? Colors.white.withOpacity(0.10) : kBackgroundLight, borderRadius: BorderRadius.circular(15)), 
+                                  child: Image.network(item['img'], fit: BoxFit.contain)
+                                ), 
+                                const SizedBox(width: 13), 
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start, 
                                     children: [
                                       Row(
                                         children: [
-                                          Text(item["title"], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: kPremiumBlack)),
-                                          if (item["isRange"] == true) ...[
-                                            const SizedBox(width: 4),
-                                            const Icon(Icons.info_outline_rounded, size: 15, color: Colors.grey),
+                                          Flexible(child: Text(item['title'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: isSelected ? Colors.white : kPremiumBlack))), 
+                                          if (item['isRange'] == true) ...[
+                                            const SizedBox(width: 5), 
+                                            Icon(Icons.info_outline_rounded, size: 15, color: isSelected ? Colors.white60 : kTextGrey)
                                           ]
-                                        ],
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(item["subtitle"], maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: kTextGrey, fontWeight: FontWeight.w500)),
-                                    ],
-                                  ),
-                                ),
-                                if (item["priceText"].toString().isNotEmpty)
-                                  Text(item["priceText"], style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900, color: kPremiumBlack)),
-                              ],
-                            ),
-                          ),
+                                        ]
+                                      ), 
+                                      const SizedBox(height: 3), 
+                                      Text(item['subtitle'], maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5, color: isSelected ? Colors.white70 : kTextGrey, fontWeight: FontWeight.w600)), 
+                                      const SizedBox(height: 5), 
+                                      Row(
+                                        children: [
+                                          Icon(Icons.access_time_rounded, size: 14, color: isSelected ? Colors.white60 : kTextGrey), 
+                                          const SizedBox(width: 4), 
+                                          Text(item['eta'], style: TextStyle(fontSize: 11, color: isSelected ? Colors.white70 : kTextGrey, fontWeight: FontWeight.w800))
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ), 
+                                const SizedBox(width: 8), 
+                                Text(item['priceText'], style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900, color: isSelected ? Colors.white : kPremiumBlack))
+                              ]
+                            )
+                          )
                         );
-                      },
-                    ),
+                      }
+                    )
                   ),
-
-                  Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 14), 
+                    decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, -8))]), 
+                    child: Column(
                       children: [
-                        _buildDockAction(Icons.payments_rounded, "Cash", const Color(0xFF16A34A)),
-                        Container(height: 18, width: 1, color: Colors.grey.shade300),
-                        _buildDockAction(Icons.local_offer_rounded, "Coupon", const Color(0xFF16A34A)),
-                        Container(height: 18, width: 1, color: Colors.grey.shade300),
-                        _buildDockAction(Icons.person_rounded, "Myself", kTextGrey),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 54,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: kPremiumBlack,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          elevation: 0,
+                        Row(
+                          children: [
+                            Expanded(child: _buildDockAction(Icons.payments_rounded, 'Cash', kPremiumGreen)), 
+                            const SizedBox(width: 10), 
+                            Expanded(child: _buildDockAction(Icons.local_offer_rounded, 'Coupon', kPremiumIndigo)), 
+                            const SizedBox(width: 10), 
+                            Expanded(child: _buildDockAction(Icons.person_rounded, 'Myself', kTextGrey))
+                          ]
                         ),
-                        onPressed: () {
-                          Navigator.pop(ctx);
-                          _showSoloOrShareStep2(destination, dropLatLng, baseData, selectedRide);
-                        },
-                        child: Text(
-                          selectedRide["title"] == "Book Any" ? "Book Any" : "Book ${selectedRide["title"]}",
-                          style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w800),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          width: double.infinity, height: 56, 
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(backgroundColor: kPremiumBlack, foregroundColor: Colors.white), 
+                            onPressed: () { 
+                              Navigator.pop(ctx); 
+                              _showSoloOrShareStep2(destination, dropLatLng, baseData, selectedRide); 
+                            }, 
+                            child: Text(selectedRide['title'] == 'Book Any' ? 'Continue with Book Any' : 'Continue with ${selectedRide['title']}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900))
+                          )
                         ),
-                      ),
-                    ),
+                      ]
+                    )
                   ),
-                ],
-              ),
+                ]
+              )
             ),
           );
         },
@@ -631,156 +609,163 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildDockAction(IconData icon, String label, Color iconColor) {
-    return Row(
-      children: [
-        Icon(icon, size: 18, color: iconColor),
-        const SizedBox(width: 6),
-        Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kPremiumBlack)),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10), 
+      decoration: BoxDecoration(color: kBackgroundLight, borderRadius: BorderRadius.circular(15), border: Border.all(color: kBorderGrey.withOpacity(0.55))), 
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center, 
+        children: [
+          Icon(icon, size: 17, color: iconColor), 
+          const SizedBox(width: 6), 
+          Flexible(child: Text(label, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: kPremiumBlack)))
+        ]
+      )
     );
   }
 
   void _showSoloOrShareStep2(String destination, LatLng dropLatLng, var baseData, Map<String, dynamic> selectedCar) {
-    String selectedMode = "shared";
-    int singlePrice = selectedCar["singlePrice"];
+    String selectedMode = 'shared';
+    int singlePrice = selectedCar['singlePrice'];
     int soloFare = singlePrice;
     int sharedFare = (singlePrice * 0.65).round();
-
-    bool isRental = selectedCar["title"] == "Rental";
-    String soloPriceStr = isRental ? "" : "₹$soloFare";
-    String sharedPriceStr = isRental ? "" : "₹$sharedFare";
+    bool isRental = selectedCar['title'] == 'Rental';
+    String soloPriceStr = isRental ? '' : '₹$soloFare';
+    String sharedPriceStr = isRental ? '' : '₹$sharedFare';
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
-        builder: (BuildContext context, StateSetter setModalState) {
+        builder: (context, setModalState) {
           return Container(
-            padding: const EdgeInsets.only(left: 24, right: 24, top: 12, bottom: 28),
-            decoration: const BoxDecoration(color: kCardWhite, borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+            padding: const EdgeInsets.fromLTRB(18, 12, 18, 20),
+            decoration: const BoxDecoration(color: kCardWhite, borderRadius: BorderRadius.vertical(top: Radius.circular(32))),
             child: SafeArea(
+              top: false, 
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min, 
+                crossAxisAlignment: CrossAxisAlignment.start, 
                 children: [
-                  Center(child: Container(width: 44, height: 4, decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(4)))),
-                  const SizedBox(height: 20),
-                  Text('Choose Mode for ${selectedCar["title"]}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: kPremiumBlack)),
+                  Center(child: Container(width: 44, height: 5, decoration: BoxDecoration(color: kBorderGrey, borderRadius: BorderRadius.circular(10)))),
                   const SizedBox(height: 18),
-
+                  const Text('Ride your way', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900, letterSpacing: -0.9)),
+                  const SizedBox(height: 5),
+                  Text(destination, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: kTextGrey, fontWeight: FontWeight.w600, fontSize: 12)),
+                  const SizedBox(height: 18),
                   GestureDetector(
-                    onTap: () => setModalState(() => selectedMode = "solo"),
-                    child: Container(
-                      padding: const EdgeInsets.all(18),
-                      decoration: BoxDecoration(
-                        color: selectedMode == "solo" ? kBackgroundLight : kCardWhite,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: selectedMode == "solo" ? kPremiumBlack : kBorderGrey, width: selectedMode == "solo" ? 2 : 1),
-                      ),
+                    onTap: () => setModalState(() => selectedMode = 'solo'), 
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 180), 
+                      padding: const EdgeInsets.all(16), 
+                      decoration: BoxDecoration(color: selectedMode == 'solo' ? kPremiumBlack : kBackgroundLight, borderRadius: BorderRadius.circular(22), border: Border.all(color: selectedMode == 'solo' ? kPremiumBlack : kBorderGrey)), 
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.person_rounded, size: 32, color: kPremiumBlack),
-                              const SizedBox(width: 14),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text("Solo / Private", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: kPremiumBlack)),
-                                  Text(isRental ? "Hourly basis" : "Private & direct", style: TextStyle(fontSize: 12, color: kTextGrey, fontWeight: FontWeight.w500)),
-                                ],
-                              ),
-                            ],
-                          ),
-                          if (soloPriceStr.isNotEmpty)
-                            Text(soloPriceStr, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: kPremiumBlack)),
-                        ],
-                      ),
-                    ),
+                          Container(
+                            width: 46, height: 46, alignment: Alignment.center, 
+                            decoration: BoxDecoration(color: selectedMode == 'solo' ? Colors.white12 : Colors.white, borderRadius: BorderRadius.circular(15)), 
+                            child: Icon(Icons.person_rounded, color: selectedMode == 'solo' ? Colors.white : kPremiumBlack, size: 24)
+                          ), 
+                          const SizedBox(width: 13), 
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start, 
+                              children: [
+                                Text('Solo / Private', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: selectedMode == 'solo' ? Colors.white : kPremiumBlack)), 
+                                const SizedBox(height: 3), 
+                                Text(isRental ? 'Hourly basis' : 'Private & direct', style: TextStyle(fontSize: 12, color: selectedMode == 'solo' ? Colors.white70 : kTextGrey, fontWeight: FontWeight.w600))
+                              ]
+                            )
+                          ), 
+                          if (soloPriceStr.isNotEmpty) 
+                            Text(soloPriceStr, style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900, color: selectedMode == 'solo' ? Colors.white : kPremiumBlack))
+                        ]
+                      )
+                    )
+                  ),
+                  const SizedBox(height: 11),
+                  GestureDetector(
+                    onTap: () => setModalState(() => selectedMode = 'shared'), 
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 180), 
+                      padding: const EdgeInsets.all(16), 
+                      decoration: BoxDecoration(color: selectedMode == 'shared' ? kPremiumIndigo : Colors.white, borderRadius: BorderRadius.circular(22), border: Border.all(color: selectedMode == 'shared' ? kPremiumIndigo : kBorderGrey)), 
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 46, height: 46, alignment: Alignment.center, 
+                            decoration: BoxDecoration(color: selectedMode == 'shared' ? Colors.white24 : kBackgroundLight, borderRadius: BorderRadius.circular(15)), 
+                            child: Icon(Icons.people_alt_rounded, color: selectedMode == 'shared' ? Colors.white : kPremiumIndigo, size: 24)
+                          ), 
+                          const SizedBox(width: 13), 
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start, 
+                              children: [
+                                Row(
+                                  children: [
+                                    Text('CoCab Share', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: selectedMode == 'shared' ? Colors.white : kPremiumBlack)), 
+                                    if (!isRental) ...[
+                                      const SizedBox(width: 7), 
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4), 
+                                        decoration: BoxDecoration(color: selectedMode == 'shared' ? Colors.white : kPremiumGreen, borderRadius: BorderRadius.circular(8)), 
+                                        child: Text('SAVE', style: TextStyle(color: selectedMode == 'shared' ? kPremiumIndigo : Colors.white, fontSize: 9, fontWeight: FontWeight.w900))
+                                      )
+                                    ]
+                                  ]
+                                ), 
+                                const SizedBox(height: 3), 
+                                Text('Share with a compatible rider', style: TextStyle(fontSize: 12, color: selectedMode == 'shared' ? Colors.white70 : kTextGrey, fontWeight: FontWeight.w600))
+                              ]
+                            )
+                          ), 
+                          if (sharedPriceStr.isNotEmpty) 
+                            Text(sharedPriceStr, style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w900, color: Colors.white))
+                        ]
+                      )
+                    )
                   ),
                   const SizedBox(height: 12),
-
-                  GestureDetector(
-                    onTap: () => setModalState(() => selectedMode = "shared"),
-                    child: Container(
-                      padding: const EdgeInsets.all(18),
-                      decoration: BoxDecoration(
-                        color: selectedMode == "shared" ? kPremiumIndigo.withOpacity(0.06) : kCardWhite,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: selectedMode == "shared" ? kPremiumIndigo : kBorderGrey, width: selectedMode == "shared" ? 2 : 1),
-                      ),
+                  if (!isRental && selectedMode == 'shared') 
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10), 
+                      decoration: BoxDecoration(color: const Color(0xFFECFDF5), borderRadius: BorderRadius.circular(14)), 
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.people_alt_rounded, size: 32, color: kPremiumIndigo),
-                              const SizedBox(width: 14),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Text("CoCab Share", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: kPremiumBlack)),
-                                      const SizedBox(width: 6),
-                                      if (!isRental)
-                                        Container(padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2), decoration: BoxDecoration(color: kPremiumIndigo, borderRadius: BorderRadius.circular(6)), child: const Text("SAVE", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w900))),
-                                    ],
-                                  ),
-                                  Text("Match with smart co-riders", style: TextStyle(fontSize: 12, color: kTextGrey, fontWeight: FontWeight.w500)),
-                                ],
-                              ),
-                            ],
-                          ),
-                          if (sharedPriceStr.isNotEmpty)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(sharedPriceStr, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: kPremiumBlack)),
-                                Text(soloPriceStr, style: const TextStyle(fontSize: 12, decoration: TextDecoration.lineThrough, color: Colors.grey)),
-                              ],
-                            ),
-                        ],
-                      ),
+                          const Icon(Icons.savings_rounded, color: kPremiumGreen, size: 19), 
+                          const SizedBox(width: 8), 
+                          Text('You save ₹${soloFare - sharedFare} on this ride', style: const TextStyle(color: Color(0xFF047857), fontWeight: FontWeight.w800, fontSize: 12))
+                        ]
+                      )
                     ),
-                  ),
-                  const SizedBox(height: 24),
-
+                  const SizedBox(height: 14),
                   SizedBox(
-                    width: double.infinity,
-                    height: 54,
+                    width: double.infinity, height: 56, 
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: selectedMode == "solo" ? kPremiumBlack : kPremiumIndigo,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                        elevation: 0,
-                      ),
-                      onPressed: () async {
-                        Navigator.pop(ctx);
-                        baseData["solo_fare"] = soloFare;
-                        baseData["shared_fare"] = sharedFare;
-                        baseData["savings"] = soloFare - sharedFare;
-                        baseData["status"] = selectedMode == "solo" ? "Solo Cab Booked" : "Shared Cab Booked";
-                        baseData["car_type"] = selectedCar["title"];
-
-                        try { await http.post(Uri.parse('http://127.0.0.1:8000/save_ride'), headers: {"Content-Type": "application/json"}, body: jsonEncode(baseData)).timeout(const Duration(seconds: 3)); } catch (e) {}
-
-                        if (mounted) {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => RideTrackingScreen(pickup: LocationState.current.value.pickup, dropoff: dropLatLng, rideData: baseData, rideType: selectedMode)));
-                        }
-                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: selectedMode == 'solo' ? kPremiumBlack : kPremiumIndigo), 
+                      onPressed: () async { 
+                        Navigator.pop(ctx); 
+                        baseData['solo_fare'] = soloFare; 
+                        baseData['shared_fare'] = sharedFare; 
+                        baseData['savings'] = soloFare - sharedFare; 
+                        baseData['status'] = selectedMode == 'solo' ? 'Solo Cab Booked' : 'Shared Cab Booked'; 
+                        baseData['car_type'] = selectedCar['title']; 
+                        try { 
+                          await http.post(Uri.parse('http://127.0.0.1:8000/save_ride'), headers: {'Content-Type': 'application/json'}, body: jsonEncode(baseData)).timeout(const Duration(seconds: 3)); 
+                        } catch (e) {} 
+                        if (mounted) { 
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => RideTrackingScreen(pickup: LocationState.current.value.pickup, dropoff: dropLatLng, rideData: baseData, rideType: selectedMode))); 
+                        } 
+                      }, 
                       child: Text(
-                        selectedMode == "solo" 
-                          ? (isRental ? 'Confirm Solo' : 'Confirm Solo ($soloPriceStr)') 
-                          : (isRental ? 'Confirm Share' : 'Confirm Share ($sharedPriceStr)'),
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white),
-                      ),
-                    ),
+                        selectedMode == 'solo' ? (isRental ? 'Confirm Solo' : 'Confirm Solo ($soloPriceStr)') : (isRental ? 'Confirm Share' : 'Confirm Share ($sharedPriceStr)'), 
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.white)
+                      )
+                    )
                   ),
-                ],
-              ),
+                ]
+              )
             ),
           );
         },
@@ -793,16 +778,28 @@ class _HomeScreenState extends State<HomeScreen> {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4), padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(color: kCardWhite, borderRadius: BorderRadius.circular(20), border: Border.all(color: kBorderGrey.withOpacity(0.9), width: 1.2)),
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 9),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), border: Border.all(color: kBorderGrey.withOpacity(0.65)), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.035), blurRadius: 12, offset: const Offset(0, 4))]),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start, 
             children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.start, children: [SizedBox(height: 38, width: 48, child: Image.network(imageUrl, fit: BoxFit.contain)), const Icon(Icons.arrow_forward_ios_rounded, size: 10, color: kTextGrey)]),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                children: [
+                  Container(
+                    width: 42, height: 36, padding: const EdgeInsets.all(4), 
+                    decoration: BoxDecoration(color: kBackgroundLight, borderRadius: BorderRadius.circular(11)), 
+                    child: Image.network(imageUrl, fit: BoxFit.contain)
+                  ), 
+                  const Icon(Icons.arrow_forward_rounded, size: 15, color: kTextGrey)
+                ]
+              ),
               const SizedBox(height: 8),
-              Text(label, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: kPremiumBlack)),
-              if (priceOrSub.isNotEmpty) Text(priceOrSub, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: kTextGrey)),
-            ],
+              Text(label, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 14, color: kPremiumBlack)),
+              const SizedBox(height: 2),
+              Text(priceOrSub, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 10.5, color: kTextGrey)),
+            ]
           ),
         ),
       ),
@@ -856,162 +853,163 @@ class _HomeScreenState extends State<HomeScreen> {
     return ValueListenableBuilder<LocationData>(
       valueListenable: LocationState.current,
       builder: (context, locState, child) {
+        Future<void> openSearch({String? vehicleType}) async {
+          final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationSearchScreen(pickupAddress: locState.address, pickupLatLng: locState.pickup)));
+          if (result != null) {
+            LatLng newPickup = result['pickup'], dropLatLng = result['dropoff'];
+            String placeName = result['dropoffName'];
+            LocationState.updateLocation(newPickup);
+            _mapController.move(newPickup, 15.0);
+            _fetchRouteAndShowVehicles(placeName, dropLatLng, vehicleType: vehicleType);
+          }
+        }
+
         return Scaffold(
+          extendBody: true,
           body: Stack(
             children: [
-              Positioned.fill(
-                child: Stack(
+              FlutterMap(
+                mapController: _mapController,
+                options: MapOptions(
+                  initialCenter: locState.pickup,
+                  initialZoom: 15.0,
+                  onPositionChanged: (position, hasGesture) {
+                    if (hasGesture && position.center != null) {
+                      if (_debounce?.isActive ?? false) _debounce!.cancel();
+                      _debounce = Timer(const Duration(milliseconds: 500), () => LocationState.updateLocation(position.center!));
+                    }
+                  },
+                ),
+                children: [TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.example.cocab')],
+              ),
+
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 52, height: 52, alignment: Alignment.center, 
+                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 18, offset: const Offset(0, 7))]), 
+                        child: const Icon(Icons.local_taxi_rounded, color: kPremiumBlack, size: 27)
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: openSearch, 
+                          child: Container(
+                            height: 52, padding: const EdgeInsets.symmetric(horizontal: 16), 
+                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 18, offset: const Offset(0, 7))]), 
+                            child: Row(
+                              children: [
+                                const Icon(Icons.search_rounded, color: kTextGrey, size: 22), 
+                                const SizedBox(width: 10), 
+                                const Expanded(child: Text('Where are you going?', style: TextStyle(color: kPremiumBlack, fontWeight: FontWeight.w800, fontSize: 15))), 
+                                Icon(Icons.tune_rounded, color: kTextGrey.withOpacity(0.8), size: 19)
+                              ]
+                            )
+                          )
+                        )
+                      ),
+                      const SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () => _mapController.move(locState.pickup, 15.0), 
+                        child: Container(
+                          width: 52, height: 52, alignment: Alignment.center, 
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 18, offset: const Offset(0, 7))]), 
+                          child: const Icon(Icons.my_location_rounded, color: kPremiumBlack, size: 22)
+                        )
+                      ),
+                    ]
+                  ),
+                ),
+              ),
+
+              Align(
+                alignment: const Alignment(0, -0.75), 
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    FlutterMap(
-                      mapController: _mapController,
-                      options: MapOptions(
-                        initialCenter: locState.pickup, initialZoom: 15.0,
-                        onPositionChanged: (position, hasGesture) {
-                          if (hasGesture && position.center != null) {
-                            if (_debounce?.isActive ?? false) _debounce!.cancel();
-                            _debounce = Timer(const Duration(milliseconds: 500), () => LocationState.updateLocation(position.center!));
-                          }
-                        },
-                      ),
-                      children: [TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.example.cocab')],
-                    ),
-                    
-                    // ✨ FIX: PLACED HIGHER UP CLEARLY ABOVE THE BOTTOM SHEET ✨
-                    Align(
-                      alignment: const Alignment(0, -0.7), 
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () async {
-                              final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationSearchScreen(
-                                pickupAddress: "My Current Location", 
-                                pickupLatLng: LocationState.userHomeLocation, 
-                                initialDestination: locState.address, 
-                              )));
-                              if (result != null) {
-                                LatLng newPickup = result['pickup'], dropLatLng = result['dropoff'];
-                                String placeName = result['dropoffName'];
-                                LocationState.updateLocation(newPickup);
-                                _mapController.move(newPickup, 15.0);
-                                _fetchRouteAndShowVehicles(placeName, dropLatLng);
-                              }
-                            },
-                            child: Container(
-                              constraints: const BoxConstraints(maxWidth: 240), padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                              decoration: BoxDecoration(
-                                color: kPremiumBlack, 
-                                borderRadius: BorderRadius.circular(30), 
-                                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 8))]
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (locState.address == "Fetching address...") 
-                                    const Padding(padding: EdgeInsets.only(right: 12), child: SizedBox(width: 14, height: 14, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5))),
-                                  Expanded(
-                                    child: Text(locState.address, 
-                                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13, letterSpacing: -0.2), 
-                                      textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis
-                                    )
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 14),
-                                ],
-                              ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: openSearch,
+                      child: Container(
+                        constraints: const BoxConstraints(maxWidth: 240), 
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: kPremiumBlack, 
+                          borderRadius: BorderRadius.circular(30), 
+                          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 8))]
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (locState.address == "Fetching address...") 
+                              const Padding(padding: EdgeInsets.only(right: 12), child: SizedBox(width: 14, height: 14, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5))),
+                            Expanded(
+                              child: Text(locState.address, 
+                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13, letterSpacing: -0.2), 
+                                textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis
+                              )
                             ),
-                          ),
-                          Container(width: 2, height: 16, color: kPremiumBlack),
-                          Container(width: 12, height: 12, decoration: BoxDecoration(color: kPremiumBlack, shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 2.5), boxShadow: const [BoxShadow(color: Colors.black38, blurRadius: 8)])),
-                        ],
+                            const SizedBox(width: 8),
+                            const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 14),
+                          ],
+                        ),
                       ),
                     ),
+                    Container(width: 2, height: 16, color: kPremiumBlack),
+                    Container(width: 12, height: 12, decoration: BoxDecoration(color: kPremiumBlack, shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 2.5), boxShadow: const [BoxShadow(color: Colors.black38, blurRadius: 8)])),
                   ],
                 ),
               ),
 
-              Positioned(
-                left: 0, right: 0, bottom: 0, height: MediaQuery.of(context).size.height * 0.54, 
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                  decoration: const BoxDecoration(color: kCardWhite, borderRadius: BorderRadius.vertical(top: Radius.circular(32)), boxShadow: [BoxShadow(color: Color(0x14000000), blurRadius: 40, offset: Offset(0, -10))]),
-                  child: Column(
-                    children: [
-                      Center(child: Container(width: 48, height: 5, decoration: BoxDecoration(color: kBorderGrey, borderRadius: BorderRadius.circular(10)))),
-                      const SizedBox(height: 16),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+              DraggableScrollableSheet(
+                initialChildSize: 0.54,
+                minChildSize: 0.42, 
+                maxChildSize: 0.85, 
+                snap: true, 
+                builder: (context, scrollController) {
+                  return Container(
+                    padding: const EdgeInsets.fromLTRB(18, 12, 18, 0),
+                    decoration: const BoxDecoration(
+                      color: kCardWhite, 
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(32)), 
+                      boxShadow: [BoxShadow(color: Color(0x18000000), blurRadius: 36, offset: Offset(0, -10))]
+                    ),
+                    child: SafeArea(
+                      top: false,
+                      child: ListView(
+                        controller: scrollController, 
+                        physics: const ClampingScrollPhysics(), 
+                        padding: const EdgeInsets.only(bottom: 24),
+                        children: [
+                          Center(child: Container(margin: const EdgeInsets.only(bottom: 16), width: 42, height: 5, decoration: BoxDecoration(color: kBorderGrey, borderRadius: BorderRadius.circular(10)))),
+                          const Text('Let\'s get you moving', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, color: kPremiumBlack, letterSpacing: -0.8)),
+                          const SizedBox(height: 4),
+                          Row(
                             children: [
-                              GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () async {
-                                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationSearchScreen(pickupAddress: locState.address, pickupLatLng: locState.pickup)));
-                                  if (result != null) {
-                                    LatLng newPickup = result['pickup'], dropLatLng = result['dropoff'];
-                                    String placeName = result['dropoffName'];
-                                    LocationState.updateLocation(newPickup);
-                                    _mapController.move(newPickup, 15.0);
-                                    _fetchRouteAndShowVehicles(placeName, dropLatLng);
-                                  }
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                                  decoration: BoxDecoration(color: kBackgroundLight, borderRadius: BorderRadius.circular(20), border: Border.all(color: kBorderGrey.withOpacity(0.5))),
-                                  child: const Row(children: [Icon(Icons.search_rounded, color: kPremiumBlack, size: 28), SizedBox(width: 16), Text("Enter Destination", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: kPremiumBlack, letterSpacing: -0.5))]),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  // BIKE ON TAP
-                                  _quickServiceImageItemExact('https://cdn-icons-png.flaticon.com/512/3753/3753264.png', "Bike", "₹19 onwards", () async {
-                                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationSearchScreen(pickupAddress: locState.address, pickupLatLng: locState.pickup)));
-                                    if (result != null) {
-                                      LatLng newPickup = result['pickup'], dropLatLng = result['dropoff'];
-                                      String placeName = result['dropoffName'];
-                                      LocationState.updateLocation(newPickup);
-                                      _mapController.move(newPickup, 15.0);
-                                      _fetchRouteAndShowVehicles(placeName, dropLatLng, vehicleType: "Bike");
-                                    }
-                                  }),
-                                  // AUTO ON TAP
-                                  _quickServiceImageItemExact('https://cdn-icons-png.flaticon.com/512/1048/1048313.png', "Auto", "Quick & cheap", () async {
-                                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationSearchScreen(pickupAddress: locState.address, pickupLatLng: locState.pickup)));
-                                    if (result != null) {
-                                      LatLng newPickup = result['pickup'], dropLatLng = result['dropoff'];
-                                      String placeName = result['dropoffName'];
-                                      LocationState.updateLocation(newPickup);
-                                      _mapController.move(newPickup, 15.0);
-                                      _fetchRouteAndShowVehicles(placeName, dropLatLng, vehicleType: "Auto");
-                                    }
-                                  }),
-                                  // CABS ON TAP
-                                  _quickServiceImageItemExact('https://cdn-icons-png.flaticon.com/512/3097/3097180.png', "Cabs", "Comfy rides", () async {
-                                    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationSearchScreen(pickupAddress: locState.address, pickupLatLng: locState.pickup)));
-                                    if (result != null) {
-                                      LatLng newPickup = result['pickup'], dropLatLng = result['dropoff'];
-                                      String placeName = result['dropoffName'];
-                                      LocationState.updateLocation(newPickup);
-                                      _mapController.move(newPickup, 15.0);
-                                      _fetchRouteAndShowVehicles(placeName, dropLatLng, vehicleType: "Mini"); 
-                                    }
-                                  }),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              _buildSingleBanner5Slides(),
-                            ],
+                              const Icon(Icons.place_outlined, size: 16, color: kTextGrey), 
+                              const SizedBox(width: 5), 
+                              Expanded(child: Text(locState.address, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: kTextGrey, fontWeight: FontWeight.w600)))
+                            ]
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                          const SizedBox(height: 14),
+                          Row(
+                            children: [
+                              _quickServiceImageItemExact('https://cdn-icons-png.flaticon.com/512/3753/3753264.png', 'Bike', '₹19 onwards', () => openSearch(vehicleType: 'Bike')),
+                              _quickServiceImageItemExact('https://cdn-icons-png.flaticon.com/512/1048/1048313.png', 'Auto', 'Quick & cheap', () => openSearch(vehicleType: 'Auto')),
+                              _quickServiceImageItemExact('https://cdn-icons-png.flaticon.com/512/3097/3097180.png', 'Cabs', 'Comfy rides', () => openSearch(vehicleType: 'Mini')),
+                            ]
+                          ),
+                          const SizedBox(height: 16),
+                          _buildSingleBanner5Slides(),
+                          const SizedBox(height: 60), 
+                        ]
+                      )
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -1066,44 +1064,99 @@ class _DestinationSearchScreenState extends State<DestinationSearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundLight,
-      appBar: AppBar(leading: IconButton(icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20), onPressed: () => Navigator.pop(context)), title: const Text("Plan your ride", style: TextStyle(fontWeight: FontWeight.w900))),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.all(16), padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(color: kCardWhite, borderRadius: BorderRadius.circular(20)),
-            child: Column(
-              children: [
-                TextField(controller: _pickupController, decoration: const InputDecoration(hintText: "Pickup Location", border: InputBorder.none, prefixIcon: Icon(Icons.my_location_rounded, color: Color(0xFF22C55E)))),
-                const Divider(),
-                TextField(
-                  controller: _destinationController, focusNode: _dropoffFocus, autofocus: true,
-                  decoration: const InputDecoration(hintText: "Where to?", border: InputBorder.none, prefixIcon: Icon(Icons.location_on_rounded, color: Color(0xFFEF4444))),
-                  onChanged: (q) {
-                    if (_debounce?.isActive ?? false) _debounce!.cancel();
-                    _debounce = Timer(const Duration(milliseconds: 500), () => _search(q));
-                  },
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _searchResults.length,
-              itemBuilder: (ctx, i) {
-                var p = _searchResults[i];
-                return ListTile(
-                  leading: const Icon(Icons.location_on_outlined),
-                  title: Text(p['display_name'].split(',')[0], style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text(p['display_name'], maxLines: 1),
-                  onTap: () {
-                    Navigator.pop(context, {'pickup': _selectedPickup, 'dropoff': LatLng(double.parse(p['lat']), double.parse(p['lon'])), 'dropoffName': p['display_name'].split(',')[0]});
-                  },
-                );
-              },
-            ),
-          ),
-        ],
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8), 
+          child: IconButton(icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 19), onPressed: () => Navigator.pop(context))
+        ), 
+        title: const Text('Plan your ride')
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 2, 16, 16), 
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(14), 
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 16, offset: const Offset(0, 5))]), 
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Container(width: 38, height: 38, alignment: Alignment.center, decoration: BoxDecoration(color: const Color(0xFFECFDF5), borderRadius: BorderRadius.circular(12)), child: const Icon(Icons.my_location_rounded, color: kPremiumGreen, size: 19)), 
+                        const SizedBox(width: 10), 
+                        Expanded(child: TextField(controller: _pickupController, decoration: const InputDecoration(hintText: 'Pickup location', border: InputBorder.none, filled: false, contentPadding: EdgeInsets.zero)))
+                      ]
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 18), 
+                      child: Align(alignment: Alignment.centerLeft, child: Container(width: 2, height: 18, decoration: BoxDecoration(color: kBorderGrey, borderRadius: BorderRadius.circular(4))))
+                    ),
+                    Row(
+                      children: [
+                        Container(width: 38, height: 38, alignment: Alignment.center, decoration: BoxDecoration(color: const Color(0xFFFFF1F2), borderRadius: BorderRadius.circular(12)), child: const Icon(Icons.location_on_rounded, color: Color(0xFFEF4444), size: 19)), 
+                        const SizedBox(width: 10), 
+                        Expanded(
+                          child: TextField(
+                            controller: _destinationController, focusNode: _dropoffFocus, autofocus: true, 
+                            decoration: const InputDecoration(hintText: 'Where to?', border: InputBorder.none, filled: false, contentPadding: EdgeInsets.zero), 
+                            onChanged: (q) { 
+                              if (_debounce?.isActive ?? false) _debounce!.cancel(); 
+                              _debounce = Timer(const Duration(milliseconds: 500), () => _search(q)); 
+                            }
+                          )
+                        )
+                      ]
+                    ),
+                  ]
+                )
+              ),
+              const SizedBox(height: 14),
+              Align(alignment: Alignment.centerLeft, child: Text(_searchResults.isEmpty ? 'Search a place' : 'Suggestions', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: kPremiumBlack))),
+              const SizedBox(height: 8),
+              Expanded(
+                child: ListView.separated(
+                  padding: const EdgeInsets.only(bottom: 8), 
+                  itemCount: _searchResults.length, 
+                  separatorBuilder: (_, __) => const SizedBox(height: 8), 
+                  itemBuilder: (ctx, i) { 
+                    final p = _searchResults[i]; 
+                    final name = p['display_name'].split(',')[0]; 
+                    return Material(
+                      color: Colors.white, borderRadius: BorderRadius.circular(18), 
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(18), 
+                        onTap: () { 
+                          Navigator.pop(context, {'pickup': _selectedPickup, 'dropoff': LatLng(double.parse(p['lat']), double.parse(p['lon'])), 'dropoffName': name}); 
+                        }, 
+                        child: Padding(
+                          padding: const EdgeInsets.all(14), 
+                          child: Row(
+                            children: [
+                              Container(width: 42, height: 42, alignment: Alignment.center, decoration: BoxDecoration(color: kBackgroundLight, borderRadius: BorderRadius.circular(13)), child: const Icon(Icons.place_rounded, color: kPremiumIndigo, size: 20)), 
+                              const SizedBox(width: 12), 
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start, 
+                                  children: [
+                                    Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900)), 
+                                    const SizedBox(height: 3), 
+                                    Text(p['display_name'], maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11.5, color: kTextGrey, fontWeight: FontWeight.w500))
+                                  ]
+                                )
+                              ), 
+                              const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: kTextGrey)
+                            ]
+                          )
+                        )
+                      )
+                    ); 
+                  }
+                )
+              )
+            ]
+          )
+        )
       ),
     );
   }
@@ -1206,53 +1259,68 @@ class _RideTrackingScreenState extends State<RideTrackingScreen> with SingleTick
 
   @override
   Widget build(BuildContext context) {
+    final fare = widget.rideType == 'solo' ? widget.rideData['solo_fare'] : widget.rideData['shared_fare'];
     return Scaffold(
       body: Stack(
         children: [
           FlutterMap(
-            mapController: _mapController, options: MapOptions(initialCenter: widget.pickup, initialZoom: 14.5),
+            mapController: _mapController, 
+            options: MapOptions(initialCenter: widget.pickup, initialZoom: 14.5), 
             children: [
               TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.example.cocab'),
-              if (_routePoints.isNotEmpty) PolylineLayer(polylines: [Polyline(points: _routePoints, strokeWidth: 5.0, color: kPremiumIndigo)]),
-              MarkerLayer(markers: [
-                Marker(point: widget.pickup, child: const Icon(Icons.location_on, color: Colors.green, size: 36)),
-                Marker(point: widget.dropoff, child: const Icon(Icons.location_on, color: Colors.red, size: 36)),
-                if (_driverAssigned) Marker(point: _currentLocation, width: 90, height: 90, child: Stack(alignment: Alignment.center, children: [Container(width: 60, height: 60, decoration: BoxDecoration(shape: BoxShape.circle, color: kPremiumIndigo.withOpacity(0.15), boxShadow: [BoxShadow(color: kPremiumIndigo.withOpacity(0.3), blurRadius: 20, spreadRadius: 5)])), _buildF1CarMarker()]))
-              ]),
-            ],
-          ),
-          SafeArea(child: Padding(padding: const EdgeInsets.all(16.0), child: InkWell(onTap: () => Navigator.pop(context), child: Container(padding: const EdgeInsets.all(10), decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle), child: const Icon(Icons.arrow_back))))),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              margin: const EdgeInsets.all(16), padding: const EdgeInsets.all(22),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 30)]),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(_rideStatus, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)), if (!_tripCompleted) const Text("OTP: 1616", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))]),
-                  const SizedBox(height: 16),
-                  Text("Fare: ₹${widget.rideType == 'solo' ? widget.rideData['solo_fare'] : widget.rideData['shared_fare']}", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
-                  const SizedBox(height: 16),
-                  if (!_tripCompleted)
-                    SizedBox(width: double.infinity, height: 50, child: OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel Ride")))
-                  else
-                    SizedBox(
-                      width: double.infinity, height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: kPremiumBlack),
-                        onPressed: () {
-                          var options = {'key': 'rzp_test_TYJRj3FXddpH6m', 'amount': (widget.rideType == 'solo' ? widget.rideData['solo_fare'] : widget.rideData['shared_fare']) * 100, 'name': 'CoCab', 'prefill': {'contact': AppState.userPhone.value}};
-                          js.context.callMethod('eval', ['''var rzp = new Razorpay(${jsonEncode(options)}); rzp.open();''']);
-                        },
-                        child: const Text("Pay via Razorpay", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                ],
+              if (_routePoints.isNotEmpty) 
+                PolylineLayer(polylines: [Polyline(points: _routePoints, strokeWidth: 5.5, color: kPremiumIndigo)]),
+              MarkerLayer(
+                markers: [
+                  Marker(point: widget.pickup, child: Container(width: 18, height: 18, decoration: BoxDecoration(color: kPremiumGreen, shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 4), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.18), blurRadius: 8)]))), 
+                  Marker(point: widget.dropoff, child: Container(width: 18, height: 18, decoration: BoxDecoration(color: const Color(0xFFEF4444), shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 4), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.18), blurRadius: 8)]))), 
+                  if (_driverAssigned) 
+                    Marker(point: _currentLocation, width: 96, height: 96, child: Stack(alignment: Alignment.center, children: [Container(width: 72, height: 72, decoration: BoxDecoration(shape: BoxShape.circle, color: kPremiumIndigo.withOpacity(0.12))), _buildF1CarMarker()]))
+                ]
               ),
-            ),
-          )
-        ],
+            ]
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16), 
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context), 
+                child: Container(width: 48, height: 48, alignment: Alignment.center, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(17), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 16, offset: const Offset(0, 6))]), child: const Icon(Icons.arrow_back_ios_new_rounded, size: 19))
+              )
+            )
+          ),
+          Align(
+            alignment: Alignment.bottomCenter, 
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(12, 0, 12, 12), padding: const EdgeInsets.fromLTRB(18, 14, 18, 18), 
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(28), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.13), blurRadius: 28, offset: const Offset(0, 8))]), 
+              child: Column(
+                mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, 
+                children: [
+                  Row(
+                    children: [
+                      Container(width: 46, height: 46, alignment: Alignment.center, decoration: BoxDecoration(color: _tripCompleted ? const Color(0xFFECFDF5) : kBackgroundLight, borderRadius: BorderRadius.circular(15)), child: Icon(_tripCompleted ? Icons.check_circle_rounded : Icons.local_taxi_rounded, color: _tripCompleted ? kPremiumGreen : kPremiumBlack, size: 25)), 
+                      const SizedBox(width: 12), 
+                      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(_rideStatus, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: kPremiumBlack)), const SizedBox(height: 3), Text(_tripCompleted ? 'Thanks for riding with CoCab' : 'Your ride is being handled safely', style: const TextStyle(fontSize: 11.5, color: kTextGrey, fontWeight: FontWeight.w600))])), 
+                      if (!_tripCompleted) 
+                        Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8), decoration: BoxDecoration(color: kPremiumBlack, borderRadius: BorderRadius.circular(12)), child: const Column(children: [Text('OTP', style: TextStyle(color: Colors.white60, fontSize: 9, fontWeight: FontWeight.w700)), SizedBox(height: 1), Text('1616', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13))]))
+                    ]
+                  ),
+                  const SizedBox(height: 14),
+                  Container(
+                    padding: const EdgeInsets.all(13), decoration: BoxDecoration(color: kBackgroundLight, borderRadius: BorderRadius.circular(17)), 
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [const Text('Estimated fare', style: TextStyle(color: kTextGrey, fontWeight: FontWeight.w700, fontSize: 12)), Text('₹$fare', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: kPremiumBlack))])
+                  ),
+                  const SizedBox(height: 12),
+                  if (!_tripCompleted) 
+                    SizedBox(width: double.infinity, height: 50, child: OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel Ride'))) 
+                  else 
+                    SizedBox(width: double.infinity, height: 54, child: ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: kPremiumBlack), onPressed: () { var options = {'key': 'rzp_test_TYJRj3FXddpH6m', 'amount': (widget.rideType == 'solo' ? widget.rideData['solo_fare'] : widget.rideData['shared_fare']) * 100, 'name': 'CoCab', 'prefill': {'contact': AppState.userPhone.value}}; js.context.callMethod('eval', ['''var rzp = new Razorpay(${jsonEncode(options)}); rzp.open();''']); }, child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.lock_rounded, size: 17), SizedBox(width: 7), Text('Pay securely via Razorpay', style: TextStyle(fontWeight: FontWeight.w900))]))),
+                ]
+              )
+            )
+          ),
+        ]
       ),
     );
   }
@@ -1268,50 +1336,72 @@ class AllServicesScreen extends StatefulWidget {
 }
 
 class _AllServicesScreenState extends State<AllServicesScreen> {
-  @override 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundLight,
-      appBar: AppBar(
-        title: const Text('Services', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 32, letterSpacing: -1, color: kPremiumBlack)), 
-        backgroundColor: kBackgroundLight, 
-        elevation: 0
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: GridView.count(
-          crossAxisCount: 2, crossAxisSpacing: 20, mainAxisSpacing: 20, childAspectRatio: 1.0,
-          children: [
-            _buildServiceCard(context, "Laundry", "https://cdn-icons-png.flaticon.com/512/3003/3003984.png", () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const LaundryShopsScreen()));
-            }),
-            _buildServiceCard(context, "Parcel", "https://cdn-icons-png.flaticon.com/512/2769/2769339.png", () {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Parcel service coming soon! 📦')));
-            }),
-            _buildServiceCard(context, "Food", "https://cdn-icons-png.flaticon.com/512/1046/1046784.png", () {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Food delivery coming soon! 🍔')));
-            }),
-          ],
-        ),
-      ),
+      backgroundColor: kBackgroundLight, 
+      appBar: AppBar(title: const Text('Services')), 
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(18, 8, 18, 120), 
+        children: [
+          Container(
+            padding: const EdgeInsets.all(20), decoration: BoxDecoration(color: kPremiumBlack, borderRadius: BorderRadius.circular(26)), 
+            child: Row(
+              children: [
+                Container(width: 48, height: 48, alignment: Alignment.center, decoration: BoxDecoration(color: Colors.white.withOpacity(0.10), borderRadius: BorderRadius.circular(16)), child: const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 25)), 
+                const SizedBox(width: 13), 
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, 
+                    children: [
+                      Text('Everything you need', style: TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w900)), 
+                      SizedBox(height: 4), 
+                      Text('Ride, send, clean and explore from CoCab.', style: TextStyle(color: Colors.white70, fontSize: 12.5, fontWeight: FontWeight.w500))
+                    ]
+                  )
+                )
+              ]
+            )
+          ),
+          const SizedBox(height: 18),
+          const Text('Explore services', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900, letterSpacing: -0.3)),
+          const SizedBox(height: 10),
+          GridView.count(
+            shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 0.95, 
+            children: [
+              _buildServiceCard(context, 'Laundry', 'https://cdn-icons-png.flaticon.com/512/3003/3003984.png', () { Navigator.push(context, MaterialPageRoute(builder: (context) => const LaundryShopsScreen())); }),
+              _buildServiceCard(context, 'Parcel', 'https://cdn-icons-png.flaticon.com/512/2769/2769339.png', () { ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Parcel service coming soon! 📦'))); }),
+              _buildServiceCard(context, 'Food', 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png', () { ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Food delivery coming soon! 🍔'))); }),
+            ]
+          ),
+        ]
+      )
     );
   }
 
   Widget _buildServiceCard(BuildContext context, String title, String imgUrl, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(24),
+    final iconTint = title == 'Laundry' ? kPremiumIndigo : (title == 'Parcel' ? kPremiumGreen : const Color(0xFFF59E0B));
+    return GestureDetector(
+      onTap: onTap, 
       child: Container(
-        decoration: BoxDecoration(color: kCardWhite, borderRadius: BorderRadius.circular(24), boxShadow: [BoxShadow(color: kPremiumBlack.withOpacity(0.04), blurRadius: 20, offset: const Offset(0, 4))]),
+        padding: const EdgeInsets.all(15), 
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), border: Border.all(color: kBorderGrey.withOpacity(0.7)), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.035), blurRadius: 15, offset: const Offset(0, 5))]), 
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start, 
           children: [
-            Image.network(imgUrl, width: 64, height: 64), 
-            const SizedBox(height: 16), 
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18, letterSpacing: -0.3, color: kPremiumBlack))
-          ],
-        ),
-      ),
+            Expanded(child: Container(width: double.infinity, alignment: Alignment.center, decoration: BoxDecoration(color: iconTint.withOpacity(0.09), borderRadius: BorderRadius.circular(18)), child: Image.network(imgUrl, width: 68, height: 68))), 
+            const SizedBox(height: 13), 
+            Text(title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900)), 
+            const SizedBox(height: 3), 
+            Row(
+              children: [
+                const Expanded(child: Text('Open service', style: TextStyle(fontSize: 10.5, color: kTextGrey, fontWeight: FontWeight.w600))), 
+                Icon(Icons.arrow_forward_rounded, size: 17, color: iconTint)
+              ]
+            )
+          ]
+        )
+      )
     );
   }
 }
@@ -1399,81 +1489,81 @@ class _LaundryShopsScreenState extends State<LaundryShopsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundLight,
-      appBar: AppBar(
-        title: const Text('Nearest Laundries', style: TextStyle(fontWeight: FontWeight.w900, color: kPremiumBlack)), 
-        leading: const BackButton(color: kPremiumBlack)
-      ),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            decoration: BoxDecoration(color: kCardWhite, borderRadius: BorderRadius.circular(16), border: Border.all(color: kBorderGrey)),
-            child: TextField(
-              controller: _searchController,
-              onChanged: _filterShops,
-              decoration: InputDecoration(
-                hintText: "Search area or shop name...",
-                hintStyle: const TextStyle(color: kTextGrey, fontSize: 15),
-                border: InputBorder.none,
-                icon: const Icon(Icons.search, color: kTextGrey),
-                suffixIcon: _searchController.text.isNotEmpty 
-                  ? IconButton(icon: const Icon(Icons.clear, color: kTextGrey, size: 20), onPressed: () { _searchController.clear(); _filterShops(""); })
-                  : null,
-              ),
+      backgroundColor: kBackgroundLight, 
+      appBar: AppBar(title: const Text('Nearest Laundries'), actions: [IconButton(onPressed: _fetchRealShops, icon: const Icon(Icons.refresh_rounded))]), 
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 2, 16, 14), 
+              child: TextField(
+                controller: _searchController, onChanged: _filterShops, 
+                decoration: InputDecoration(
+                  hintText: 'Search area or shop name...', prefixIcon: const Icon(Icons.search_rounded), 
+                  suffixIcon: _searchController.text.isNotEmpty ? IconButton(icon: const Icon(Icons.clear_rounded), onPressed: () { _searchController.clear(); _filterShops(''); setState(() {}); }) : null
+                )
+              )
             ),
-          ),
-          
-          Expanded(
-            child: isLoading 
-              ? const Center(child: CircularProgressIndicator(color: kPremiumBlack))
-              : realShops.isEmpty 
-                ? _buildEmptyState("No shops found nearby", "Try changing your pickup location on the home screen to find laundries in other areas.")
-                : filteredShops.isEmpty
-                  ? _buildEmptyState("No match found", "We couldn't find any shop matching your search in this area.")
-                  : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: filteredShops.length,
-                      itemBuilder: (context, index) {
-                        final shop = filteredShops[index];
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 16),
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(color: kCardWhite, borderRadius: BorderRadius.circular(20), boxShadow: [BoxShadow(color: kPremiumBlack.withOpacity(0.05), blurRadius: 20, offset: const Offset(0, 4))]),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(child: Text(shop["name"] ?? "Laundry Shop", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: kPremiumBlack))),
-                                  Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), decoration: BoxDecoration(color: kPremiumIndigo.withOpacity(0.1), borderRadius: BorderRadius.circular(8)), child: Text(shop["distance"] ?? "N/A", style: const TextStyle(fontWeight: FontWeight.w800, color: kPremiumIndigo, fontSize: 12))),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Row(children: [const Icon(Icons.location_on, size: 16, color: kTextGrey), const SizedBox(width: 8), Expanded(child: Text(shop["address"] ?? "", style: const TextStyle(color: kTextGrey, fontWeight: FontWeight.w500)))]),
-                              const SizedBox(height: 8),
-                              Row(children: [const Icon(Icons.phone, size: 16, color: kTextGrey), const SizedBox(width: 8), Text(shop["phone"] ?? "Not available", style: const TextStyle(color: kTextGrey, fontWeight: FontWeight.w500))]),
-                              const SizedBox(height: 20),
-                              SizedBox(
-                                width: double.infinity, height: 50,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(backgroundColor: kPremiumBlack, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                                  onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => LaundryTrackingScreen(shopData: shop)));
-                                  },
-                                  child: const Text("Book Wash Pickup", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16)),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-          ),
-        ],
-      ),
+            Expanded(
+              child: isLoading 
+                ? const Center(child: CircularProgressIndicator(color: kPremiumIndigo)) 
+                : realShops.isEmpty 
+                  ? _buildEmptyState('No shops found nearby', 'Try changing your pickup location on the home screen.') 
+                  : filteredShops.isEmpty 
+                    ? _buildEmptyState('No match found', 'We couldn\'t find any shop matching your search.') 
+                    : ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 110), 
+                        itemCount: filteredShops.length, 
+                        itemBuilder: (context, index) { 
+                          final shop = filteredShops[index]; 
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 12), padding: const EdgeInsets.all(15), 
+                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(22), border: Border.all(color: kBorderGrey.withOpacity(0.65)), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 15, offset: const Offset(0, 5))]), 
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start, 
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(width: 44, height: 44, alignment: Alignment.center, decoration: BoxDecoration(color: const Color(0xFFEEF2FF), borderRadius: BorderRadius.circular(14)), child: const Icon(Icons.local_laundry_service_rounded, color: kPremiumIndigo, size: 22)), 
+                                    const SizedBox(width: 11), 
+                                    Expanded(child: Text(shop['name'] ?? 'Laundry Shop', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900))), 
+                                    Container(padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6), decoration: BoxDecoration(color: const Color(0xFFEEF2FF), borderRadius: BorderRadius.circular(10)), child: Text(shop['distance'] ?? 'N/A', style: const TextStyle(color: kPremiumIndigo, fontWeight: FontWeight.w900, fontSize: 11)))
+                                  ]
+                                ), 
+                                const SizedBox(height: 11), 
+                                Row(
+                                  children: [
+                                    const Icon(Icons.location_on_outlined, size: 17, color: kTextGrey), 
+                                    const SizedBox(width: 7), 
+                                    Expanded(child: Text(shop['address'] ?? '', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: kTextGrey, fontSize: 12, fontWeight: FontWeight.w600)))
+                                  ]
+                                ), 
+                                const SizedBox(height: 7), 
+                                Row(
+                                  children: [
+                                    const Icon(Icons.phone_outlined, size: 17, color: kTextGrey), 
+                                    const SizedBox(width: 7), 
+                                    Text(shop['phone'] ?? 'Not available', style: const TextStyle(color: kTextGrey, fontSize: 12, fontWeight: FontWeight.w600))
+                                  ]
+                                ), 
+                                const SizedBox(height: 13), 
+                                SizedBox(
+                                  width: double.infinity, height: 49, 
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(backgroundColor: kPremiumBlack), 
+                                    onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => LaundryTrackingScreen(shopData: shop))); }, 
+                                    child: const Text('Book Wash Pickup', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white))
+                                  )
+                                )
+                              ]
+                            )
+                          ); 
+                        }
+                      )
+            )
+          ]
+        )
+      )
     );
   }
 }
@@ -1567,51 +1657,95 @@ class _LaundryTrackingScreenState extends State<LaundryTrackingScreen> with Sing
       body: Stack(
         children: [
           FlutterMap(
-            mapController: _mapController, options: MapOptions(initialCenter: _userLocation, initialZoom: 13.0),
+            mapController: _mapController, options: MapOptions(initialCenter: _userLocation, initialZoom: 13.0), 
             children: [
-              TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.example.cocab'),
-              if (_routePoints.isNotEmpty) PolylineLayer(polylines: [Polyline(points: _routePoints, strokeWidth: 4.0, color: kPremiumIndigo)]),
-              MarkerLayer(markers: [
-                Marker(point: _userLocation, child: const Icon(Icons.home, color: Colors.blue, size: 36)),
-                Marker(point: _shopLocation, child: const Icon(Icons.local_laundry_service, color: Colors.orange, size: 36)),
-                if (_flowStep == 2 || _flowStep == 4) 
-                  Marker(point: _currentLocation, child: const Icon(Icons.directions_bike, color: kPremiumBlack, size: 36)),
-              ]),
-            ],
+              TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.example.cocab'), 
+              if (_routePoints.isNotEmpty) 
+                PolylineLayer(polylines: [Polyline(points: _routePoints, strokeWidth: 4.0, color: kPremiumIndigo)]), 
+              MarkerLayer(
+                markers: [
+                  Marker(point: _userLocation, child: const Icon(Icons.home_rounded, color: kPremiumGreen, size: 34)), 
+                  Marker(point: _shopLocation, child: const Icon(Icons.local_laundry_service_rounded, color: kPremiumIndigo, size: 34)), 
+                  if (_flowStep == 2 || _flowStep == 4) 
+                    Marker(point: _currentLocation, child: const Icon(Icons.directions_bike_rounded, color: kPremiumBlack, size: 36))
+                ]
+              )
+            ]
           ),
-          SafeArea(child: Padding(padding: const EdgeInsets.all(16.0), child: InkWell(onTap: () => Navigator.pop(context), child: Container(padding: const EdgeInsets.all(10), decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle), child: const Icon(Icons.arrow_back))))),
-          
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16), 
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context), 
+                child: Container(width: 48, height: 48, alignment: Alignment.center, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(17), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 16, offset: const Offset(0, 6))]), child: const Icon(Icons.arrow_back_ios_new_rounded, size: 19))
+              )
+            )
+          ),
           Align(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.bottomCenter, 
             child: Container(
-              margin: const EdgeInsets.all(16), padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 30)]),
+              margin: const EdgeInsets.fromLTRB(12, 0, 12, 12), padding: const EdgeInsets.all(18), 
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(28), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.13), blurRadius: 28, offset: const Offset(0, 8))]), 
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, 
                 children: [
-                  Text(_status, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: kPremiumBlack), textAlign: TextAlign.center),
-                  const SizedBox(height: 16),
-                  if (_actionText.isNotEmpty)
+                  Row(
+                    children: [
+                      Container(width: 46, height: 46, alignment: Alignment.center, decoration: BoxDecoration(color: kBackgroundLight, borderRadius: BorderRadius.circular(15)), child: const Icon(Icons.local_laundry_service_rounded, color: kPremiumIndigo, size: 24)), 
+                      const SizedBox(width: 12), 
+                      Expanded(child: Text(_status, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: kPremiumBlack))),
+                    ]
+                  ), 
+                  const SizedBox(height: 8), 
+                  Text(widget.shopData['name'] ?? 'Laundry partner', style: const TextStyle(color: kTextGrey, fontWeight: FontWeight.w600, fontSize: 12)), 
+                  if (_actionText.isNotEmpty) ...[
+                    const SizedBox(height: 14), 
                     SizedBox(
-                      height: 54,
+                      width: double.infinity, height: 52, 
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: kPremiumIndigo, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-                        onPressed: _handleActionButton,
-                        child: Text(_actionText, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                      ),
-                    ),
-                ],
-              ),
-            ),
+                        style: ElevatedButton.styleFrom(backgroundColor: kPremiumIndigo), 
+                        onPressed: _handleActionButton, 
+                        child: Text(_actionText, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14))
+                      )
+                    )
+                  ]
+                ]
+              )
+            )
           )
-        ],
-      ),
+        ]
+      )
     );
   }
 }
 
-class TravelScreen extends StatelessWidget { const TravelScreen({super.key}); @override Widget build(BuildContext context) => const Scaffold(body: Center(child: Text("Travel Screen"))); }
+class TravelScreen extends StatelessWidget { 
+  const TravelScreen({super.key}); 
+  @override Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: kBackgroundLight, appBar: AppBar(title: const Text('Travel')), 
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(28), 
+          child: Container(
+            width: double.infinity, padding: const EdgeInsets.all(24), 
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(28), border: Border.all(color: kBorderGrey.withOpacity(0.7)), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 18, offset: const Offset(0, 5))]), 
+            child: Column(
+              mainAxisSize: MainAxisSize.min, 
+              children: [
+                Container(width: 68, height: 68, alignment: Alignment.center, decoration: BoxDecoration(color: kPremiumIndigo.withOpacity(0.10), shape: BoxShape.circle), child: const Icon(Icons.flight_takeoff_rounded, color: kPremiumIndigo, size: 32)), 
+                const SizedBox(height: 18), 
+                const Text('Travel is coming soon', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w900)), 
+                const SizedBox(height: 7), 
+                const Text('Airport rides and intercity travel will appear here.', textAlign: TextAlign.center, style: TextStyle(color: kTextGrey, fontSize: 12.5, fontWeight: FontWeight.w600, height: 1.4))
+              ]
+            )
+          )
+        )
+      )
+    );
+  }
+}
 
 // ==========================================
 // 👤 9. ACCOUNT SCREEN (RAPIDO CLONE UI)
@@ -1666,7 +1800,6 @@ class AccountScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          // Profile Details Card
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             decoration: BoxDecoration(
@@ -1729,7 +1862,6 @@ class AccountScreen extends StatelessWidget {
           
           const SizedBox(height: 16),
 
-          // Menu Items
           _buildMenuItem(Icons.help_outline_rounded, "Help"),
           _buildMenuItem(Icons.account_balance_wallet_outlined, "Payment"),
           _buildMenuItem(Icons.history_rounded, "My Rides", onTap: () {
@@ -1782,7 +1914,6 @@ class _RideHistoryScreenState extends State<RideHistoryScreen> {
       }
     } catch (e) {}
 
-    // Fallback demo data if backend is offline
     setState(() {
       _rides = [
         {
@@ -1809,107 +1940,60 @@ class _RideHistoryScreenState extends State<RideHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundLight,
-      appBar: AppBar(
-        title: const Text('Your Trips', style: TextStyle(fontWeight: FontWeight.w900, color: kPremiumBlack)),
-        leading: const BackButton(color: kPremiumBlack),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh_rounded, color: kPremiumBlack),
-            onPressed: _fetchRideHistory,
-          )
-        ],
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: kPremiumBlack))
-          : _rides.isEmpty
-              ? const Center(child: Text("No past rides found", style: TextStyle(color: kTextGrey, fontWeight: FontWeight.bold)))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _rides.length,
-                  itemBuilder: (context, index) {
-                    final ride = _rides[index];
-                    final bool isShared = (ride['savings'] ?? 0) > 0;
-
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 16),
-                      padding: const EdgeInsets.all(18),
-                      decoration: BoxDecoration(
-                        color: kCardWhite,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 16, offset: const Offset(0, 4))],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: kBackgroundLight, 
+      appBar: AppBar(title: const Text('Your Trips'), actions: [IconButton(icon: const Icon(Icons.refresh_rounded), onPressed: _fetchRideHistory)]), 
+      body: _isLoading 
+        ? const Center(child: CircularProgressIndicator(color: kPremiumIndigo)) 
+        : _rides.isEmpty 
+          ? const Center(child: Text('No past rides found', style: TextStyle(color: kTextGrey, fontWeight: FontWeight.w800))) 
+          : ListView.builder(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 30), 
+              itemCount: _rides.length, 
+              itemBuilder: (context, index) { 
+                final ride = _rides[index]; 
+                final bool isShared = (ride['savings'] ?? 0) > 0; 
+                final fare = ride['shared_fare'] ?? ride['solo_fare'] ?? 0; 
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12), padding: const EdgeInsets.all(16), 
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(23), border: Border.all(color: kBorderGrey.withOpacity(0.65)), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 15, offset: const Offset(0, 5))]), 
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, 
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Container(width: 46, height: 46, alignment: Alignment.center, decoration: BoxDecoration(color: isShared ? const Color(0xFFEEF2FF) : kBackgroundLight, borderRadius: BorderRadius.circular(15)), child: Icon(isShared ? Icons.people_alt_rounded : Icons.local_taxi_rounded, color: isShared ? kPremiumIndigo : kPremiumBlack, size: 23)), 
+                          const SizedBox(width: 11), 
+                          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(isShared ? 'CoCab Share' : 'Solo Ride', style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15.5)), const SizedBox(height: 3), Text('Ride #${ride['id'] ?? index + 1}', style: const TextStyle(color: kTextGrey, fontSize: 11, fontWeight: FontWeight.w700))])), 
+                          Text('₹$fare', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900))
+                        ]
+                      ), 
+                      const SizedBox(height: 15), 
+                      Row(
+                        children: [
+                          Column(children: [Container(width: 9, height: 9, decoration: const BoxDecoration(color: kPremiumGreen, shape: BoxShape.circle)), Container(width: 2, height: 24, color: kBorderGrey), Container(width: 9, height: 9, decoration: const BoxDecoration(color: Color(0xFFEF4444), shape: BoxShape.circle))]), 
+                          const SizedBox(width: 11), 
+                          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [const Text('Pickup location', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: kTextGrey)), const SizedBox(height: 8), Text('Drop location • ${ride['shared_distance_km'] ?? 0} km', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: kPremiumBlack))]))
+                        ]
+                      ), 
+                      if (isShared) ...[
+                        const SizedBox(height: 12), 
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9), 
+                          decoration: BoxDecoration(color: const Color(0xFFECFDF5), borderRadius: BorderRadius.circular(13)), 
+                          child: Row(
                             children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(color: kBackgroundLight, borderRadius: BorderRadius.circular(12)),
-                                    child: Icon(isShared ? Icons.people_alt_rounded : Icons.local_taxi_rounded, color: kPremiumBlack, size: 22),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(isShared ? "CoCab Share" : "Solo Ride", style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: kPremiumBlack)),
-                                      Text("Ride #${ride['id'] ?? index + 1}", style: const TextStyle(color: kTextGrey, fontSize: 12, fontWeight: FontWeight.w600)),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                "₹${ride['shared_fare'] ?? ride['solo_fare'] ?? 0}",
-                                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: kPremiumBlack),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Column(
-                                children: [
-                                  Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF22C55E), shape: BoxShape.circle)),
-                                  Container(width: 2, height: 20, color: Colors.grey.shade300),
-                                  Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFEF4444), shape: BoxShape.circle)),
-                                ],
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text("Pickup Location", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: kPremiumBlack)),
-                                    const SizedBox(height: 8),
-                                    Text("Drop Location (${ride['shared_distance_km'] ?? 0} km)", style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: kTextGrey)),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          if (isShared) ...[
-                            const SizedBox(height: 14),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(color: const Color(0xFFECFDF5), borderRadius: BorderRadius.circular(10)),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.savings_rounded, color: Color(0xFF059669), size: 18),
-                                  const SizedBox(width: 8),
-                                  Text("You saved ₹${ride['savings']} with CoCab!", style: const TextStyle(color: Color(0xFF059669), fontWeight: FontWeight.w800, fontSize: 13)),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                              const Icon(Icons.savings_rounded, color: kPremiumGreen, size: 17), 
+                              const SizedBox(width: 7), 
+                              Text('Saved ₹${ride['savings']} with CoCab', style: const TextStyle(color: Color(0xFF047857), fontSize: 11.5, fontWeight: FontWeight.w900))
+                            ]
+                          )
+                        )
+                      ]
+                    ]
+                  )
+                ); 
+              }
+            )
     );
   }
 }
