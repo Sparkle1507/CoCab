@@ -890,38 +890,43 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   },
                 ),
-                children: [TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.example.cocab')],
+                children: [
+                  TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.example.cocab'),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        point: LocationState.userHomeLocation,
+                        width: 60,
+                        height: 60,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color.fromARGB(255, 141, 243, 202).withOpacity(0.2), // Light green halo
+                          ),
+                          child: Center(
+                            child: Transform.rotate(
+                              angle: 0.5, // Tilt like the direction beacon
+                              child: const Icon(Icons.navigation_rounded, color: Color(0xFF047857), size: 28), // Darker green arrow
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
 
               SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         width: 52, height: 52, alignment: Alignment.center, 
                         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 18, offset: const Offset(0, 7))]), 
                         child: const Icon(Icons.local_taxi_rounded, color: kPremiumBlack, size: 27)
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: openSearch, 
-                          child: Container(
-                            height: 52, padding: const EdgeInsets.symmetric(horizontal: 16), 
-                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 18, offset: const Offset(0, 7))]), 
-                            child: Row(
-                              children: [
-                                const Icon(Icons.search_rounded, color: kTextGrey, size: 22), 
-                                const SizedBox(width: 10), 
-                                const Expanded(child: Text('Where are you going?', style: TextStyle(color: kPremiumBlack, fontWeight: FontWeight.w800, fontSize: 15))), 
-                                Icon(Icons.tune_rounded, color: kTextGrey.withOpacity(0.8), size: 19)
-                              ]
-                            )
-                          )
-                        )
-                      ),
-                      const SizedBox(width: 10),
                       GestureDetector(
                         onTap: () => _mapController.move(locState.pickup, 15.0), 
                         child: Container(
@@ -947,7 +952,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         constraints: const BoxConstraints(maxWidth: 240), 
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
-                          color: kPremiumBlack, 
+                          color: const Color.fromARGB(229, 2, 218, 132), 
                           borderRadius: BorderRadius.circular(30), 
                           boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 8))]
                         ),
@@ -962,14 +967,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis
                               )
                             ),
-                            const SizedBox(width: 8),
-                            const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 14),
                           ],
                         ),
                       ),
                     ),
-                    Container(width: 2, height: 16, color: kPremiumBlack),
-                    Container(width: 12, height: 12, decoration: BoxDecoration(color: kPremiumBlack, shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 2.5), boxShadow: const [BoxShadow(color: Colors.black38, blurRadius: 8)])),
+                    Container(width: 2, height: 16, color: kPremiumGreen),
+                    Container(width: 12, height: 12, decoration: BoxDecoration(color: kPremiumGreen, shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 2.5), boxShadow: const [BoxShadow(color: Colors.black38, blurRadius: 8)])),
                   ],
                 ),
               ),
@@ -995,6 +998,35 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.only(bottom: 24),
                         children: [
                           Center(child: Container(margin: const EdgeInsets.only(bottom: 16), width: 42, height: 5, decoration: BoxDecoration(color: kBorderGrey, borderRadius: BorderRadius.circular(10)))),
+                          
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: openSearch,
+                              borderRadius: BorderRadius.circular(30),
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 24),
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(color: Colors.grey.shade200, width: 1.5),
+                                  boxShadow: [
+                                    BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 10, offset: const Offset(0, 4)),
+                                    BoxShadow(color: Colors.amber.withOpacity(0.2), blurRadius: 15, offset: const Offset(0, 8)),
+                                  ],
+                                ),
+                                child: const Row(
+                                  children: [
+                                    Icon(Icons.search_rounded, color: Colors.black, size: 26),
+                                    SizedBox(width: 12),
+                                    Text('Where are you going?', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Colors.black)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+
                           const Text('Let\'s get you moving', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, color: kPremiumBlack, letterSpacing: -0.8)),
                           const SizedBox(height: 4),
                           Row(
@@ -1030,7 +1062,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 // ==========================================
-// 🔍 6. SEARCH DESTINATION
+// 🔍 6. SEARCH DESTINATION (✨ NEW UI ✨)
 // ==========================================
 class DestinationSearchScreen extends StatefulWidget {
   final String pickupAddress;
@@ -1046,7 +1078,17 @@ class _DestinationSearchScreenState extends State<DestinationSearchScreen> {
   final FocusNode _dropoffFocus = FocusNode();
   List<dynamic> _searchResults = [];
   Timer? _debounce;
+  
   late LatLng _selectedPickup;
+  LatLng? _selectedDropoff;
+  String? _selectedDropoffName;
+
+  final List<Map<String, dynamic>> recentPlaces = [
+    {"name": "Home", "address": "24, Anna Nagar West, Chennai", "icon": Icons.home_rounded, "color": Colors.orange, "lat": 13.0850, "lon": 80.2100},
+    {"name": "Office", "address": "Tidel Park, Taramani, Chennai", "icon": Icons.work_rounded, "color": Colors.brown, "lat": 12.9896, "lon": 80.2475},
+    {"name": "Phoenix MarketCity", "address": "Velachery Main Rd, Velachery", "icon": Icons.shopping_bag_rounded, "color": Colors.blue, "lat": 12.9915, "lon": 80.2160},
+    {"name": "Chennai Airport", "address": "Tirusulam, Chennai - 600016", "icon": Icons.flight_rounded, "color": Colors.indigo, "lat": 12.9716, "lon": 80.1891},
+  ];
 
   @override
   void initState() {
@@ -1072,61 +1114,186 @@ class _DestinationSearchScreenState extends State<DestinationSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isReadyToNavigate = _selectedDropoff != null && _selectedDropoffName != null;
+
     return Scaffold(
-      backgroundColor: kBackgroundLight,
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8), 
-          child: IconButton(icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 19), onPressed: () => Navigator.pop(context))
-        ), 
-        title: const Text('Plan your ride')
-      ),
+      backgroundColor: const Color(0xFFF7F8FA),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 2, 16, 16), 
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(14), 
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 16, offset: const Offset(0, 5))]), 
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(width: 38, height: 38, alignment: Alignment.center, decoration: BoxDecoration(color: const Color(0xFFECFDF5), borderRadius: BorderRadius.circular(12)), child: const Icon(Icons.my_location_rounded, color: kPremiumGreen, size: 19)), 
-                        const SizedBox(width: 10), 
-                        Expanded(child: TextField(controller: _pickupController, decoration: const InputDecoration(hintText: 'Pickup location', border: InputBorder.none, filled: false, contentPadding: EdgeInsets.zero)))
+        child: Column(
+          children: [
+            // ✨ CUSTOM HIGHLIGHTED HEADER ✨
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
+              child: Row(
+                children: [
+                  Container(
+                    width: 52, height: 52,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 16, offset: const Offset(0, 6))
                       ]
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 18), 
-                      child: Align(alignment: Alignment.centerLeft, child: Container(width: 2, height: 18, decoration: BoxDecoration(color: kBorderGrey, borderRadius: BorderRadius.circular(4))))
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded, color: kPremiumBlack, size: 20),
+                      onPressed: () => Navigator.pop(context),
                     ),
-                    Row(
-                      children: [
-                        Container(width: 38, height: 38, alignment: Alignment.center, decoration: BoxDecoration(color: const Color(0xFFFFF1F2), borderRadius: BorderRadius.circular(12)), child: const Icon(Icons.location_on_rounded, color: Color(0xFFEF4444), size: 19)), 
-                        const SizedBox(width: 10), 
-                        Expanded(
-                          child: TextField(
-                            controller: _destinationController, focusNode: _dropoffFocus, autofocus: true, 
-                            decoration: const InputDecoration(hintText: 'Where to?', border: InputBorder.none, filled: false, contentPadding: EdgeInsets.zero), 
-                            onChanged: (q) { 
-                              if (_debounce?.isActive ?? false) _debounce!.cancel(); 
-                              _debounce = Timer(const Duration(milliseconds: 500), () => _search(q)); 
-                            }
-                          )
-                        )
-                      ]
-                    ),
-                  ]
-                )
+                  ),
+                  const SizedBox(width: 18),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Plan your ride', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: kPremiumBlack, letterSpacing: -0.7)),
+                      const SizedBox(height: 2),
+                      Text('Set pickup & drop location', style: TextStyle(fontSize: 13, color: Colors.grey.shade500, fontWeight: FontWeight.w600)),
+                    ],
+                  )
+                ],
               ),
-              const SizedBox(height: 14),
-              Align(alignment: Alignment.centerLeft, child: Text(_searchResults.isEmpty ? 'Search a place' : 'Suggestions', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: kPremiumBlack))),
-              const SizedBox(height: 8),
-              Expanded(
-                child: ListView.separated(
-                  padding: const EdgeInsets.only(bottom: 8), 
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Stack(
+                alignment: Alignment.centerRight,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(20), 
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 16, offset: const Offset(0, 5))]), 
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.circle, color: kPremiumGreen, size: 12), 
+                            const SizedBox(width: 16), 
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('PICKUP', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.grey.shade400, letterSpacing: 1.0)),
+                                  TextField(
+                                    controller: _pickupController, 
+                                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: kPremiumBlack),
+                                    decoration: const InputDecoration(border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none, filled: false, contentPadding: EdgeInsets.zero, isDense: true)
+                                  ),
+                                ],
+                              )
+                            )
+                          ]
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5, top: 8, bottom: 8), 
+                          child: Container(width: 2, height: 24, decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(2)))
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.location_on_rounded, color: Colors.red, size: 18), 
+                            const SizedBox(width: 16), 
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('DROP', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.grey.shade400, letterSpacing: 1.0)),
+                                  TextField(
+                                    controller: _destinationController, focusNode: _dropoffFocus, autofocus: true, 
+                                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: kPremiumBlack),
+                                    decoration: InputDecoration(hintText: 'Where to?', hintStyle: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.w600), border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none, filled: false, contentPadding: EdgeInsets.zero, isDense: true), 
+                                    onChanged: (q) { 
+                                      if (_debounce?.isActive ?? false) _debounce!.cancel(); 
+                                      _debounce = Timer(const Duration(milliseconds: 500), () => _search(q)); 
+                                    }
+                                  ),
+                                ],
+                              )
+                            )
+                          ]
+                        ),
+                      ]
+                    )
+                  ),
+                  Positioned(
+                    right: 16,
+                    top: 54, // Centered vertically between the pickup and drop elements
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.grey.shade200, width: 1.5),
+                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))]
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(20),
+                          onTap: () {
+                            String temp = _pickupController.text;
+                            setState(() {
+                              _pickupController.text = _destinationController.text;
+                              _destinationController.text = temp;
+                            });
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.swap_vert_rounded, color: kPremiumIndigo, size: 16),
+                                SizedBox(width: 4),
+                                Text('Swap', style: TextStyle(color: kPremiumIndigo, fontWeight: FontWeight.w800, fontSize: 12))
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            
+            Expanded(
+              child: _searchResults.isEmpty 
+              ? ListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text('RECENT PLACES', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.grey, letterSpacing: 1.2)),
+                    const SizedBox(height: 12),
+                    ...recentPlaces.map((place) => Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.grey.shade200)
+                      ),
+                      child: ListTile(
+                        leading: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(color: Colors.grey.shade100, shape: BoxShape.circle),
+                          child: Icon(place['icon'], color: place['color'], size: 20),
+                        ),
+                        title: Text(place['name'], style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
+                        subtitle: Text(place['address'], style: TextStyle(fontSize: 11, color: Colors.grey.shade500, fontWeight: FontWeight.w600)),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: Colors.grey),
+                        onTap: () {
+                          setState(() {
+                            _destinationController.text = place['name'];
+                            _selectedDropoffName = place['name'];
+                            _selectedDropoff = LatLng(place['lat'], place['lon']);
+                          });
+                          FocusScope.of(context).unfocus();
+                        },
+                      ),
+                    )).toList(),
+                  ],
+                )
+              : ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), 
                   itemCount: _searchResults.length, 
                   separatorBuilder: (_, __) => const SizedBox(height: 8), 
                   itemBuilder: (ctx, i) { 
@@ -1137,7 +1304,12 @@ class _DestinationSearchScreenState extends State<DestinationSearchScreen> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(18), 
                         onTap: () { 
-                          Navigator.pop(context, {'pickup': _selectedPickup, 'dropoff': LatLng(double.parse(p['lat']), double.parse(p['lon'])), 'dropoffName': name}); 
+                          setState(() {
+                            _destinationController.text = name;
+                            _selectedDropoffName = name;
+                            _selectedDropoff = LatLng(double.parse(p['lat']), double.parse(p['lon']));
+                          });
+                          FocusScope.of(context).unfocus();
                         }, 
                         child: Padding(
                           padding: const EdgeInsets.all(14), 
@@ -1162,10 +1334,37 @@ class _DestinationSearchScreenState extends State<DestinationSearchScreen> {
                       )
                     ); 
                   }
-                )
-              )
-            ]
-          )
+                ),
+            ),
+            
+            // Select Button
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 20, offset: const Offset(0, -5))]
+              ),
+              child: SizedBox(
+                width: double.infinity, height: 54,
+                child: ElevatedButton(
+                  onPressed: isReadyToNavigate ? () {
+                    Navigator.pop(context, {
+                      'pickup': _selectedPickup, 
+                      'dropoff': _selectedDropoff, 
+                      'dropoffName': _selectedDropoffName
+                    });
+                  } : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: isReadyToNavigate ? kPremiumBlack : Colors.grey.shade200,
+                    foregroundColor: isReadyToNavigate ? Colors.white : Colors.grey.shade400,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))
+                  ),
+                  child: const Text('Select a destination', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+                ),
+              ),
+            )
+          ]
         )
       ),
     );
@@ -1433,6 +1632,7 @@ class _LaundryShopsScreenState extends State<LaundryShopsScreen> {
   List<dynamic> filteredShops = [];
   bool isLoading = true;
   final TextEditingController _searchController = TextEditingController();
+  String _selectedService = 'Wash & Fold';
 
   @override
   void initState() {
@@ -1502,82 +1702,235 @@ class _LaundryShopsScreenState extends State<LaundryShopsScreen> {
     );
   }
 
+  Widget _buildLaundryServiceCard(String title, String subtitle, IconData icon) {
+    bool isSelected = _selectedService == title;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedService = title),
+      child: Container(
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFECFDF5) : Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: isSelected ? kPremiumGreen : kBorderGrey),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: isSelected ? kPremiumGreen : kTextGrey, size: 32),
+            const SizedBox(height: 8),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
+            const SizedBox(height: 2),
+            Text(subtitle, style: const TextStyle(color: kTextGrey, fontSize: 11, fontWeight: FontWeight.w600)),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundLight, 
-      appBar: AppBar(title: const Text('Nearest Laundries'), actions: [IconButton(onPressed: _fetchRealShops, icon: const Icon(Icons.refresh_rounded))]), 
+      backgroundColor: const Color(0xFFF7F8FA), 
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF7F8FA),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text('Laundry', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+        centerTitle: true,
+      ), 
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 2, 16, 14), 
-              child: TextField(
-                controller: _searchController, onChanged: _filterShops, 
-                decoration: InputDecoration(
-                  hintText: 'Search area or shop name...', prefixIcon: const Icon(Icons.search_rounded), 
-                  suffixIcon: _searchController.text.isNotEmpty ? IconButton(icon: const Icon(Icons.clear_rounded), onPressed: () { _searchController.clear(); _filterShops(''); setState(() {}); }) : null
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Search Bar (Light Green Theme as requested)
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFFECFDF5), // Light Green Background
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: TextField(
+                  controller: _searchController, 
+                  onChanged: _filterShops, 
+                  style: const TextStyle(fontWeight: FontWeight.w600, color: kPremiumBlack),
+                  decoration: InputDecoration(
+                    hintText: 'Search laundry services...', 
+                    hintStyle: const TextStyle(color: Color(0xFF047857), fontWeight: FontWeight.w600), // Dark green hint
+                    prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF047857)), // Dark green icon
+                    suffixIcon: _searchController.text.isNotEmpty 
+                        ? IconButton(icon: const Icon(Icons.clear_rounded, color: Color(0xFF047857)), onPressed: () { _searchController.clear(); _filterShops(''); setState(() {}); }) 
+                        : const Icon(Icons.mic_none_rounded, color: Color(0xFF047857)), // Added mic icon commonly seen in these designs
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    filled: false,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                  )
                 )
-              )
-            ),
-            Expanded(
-              child: isLoading 
-                ? const Center(child: CircularProgressIndicator(color: kPremiumIndigo)) 
-                : realShops.isEmpty 
-                  ? _buildEmptyState('No shops found nearby', 'Try changing your pickup location on the home screen.') 
-                  : filteredShops.isEmpty 
-                    ? _buildEmptyState('No match found', 'We couldn\'t find any shop matching your search.') 
-                    : ListView.builder(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 110), 
-                        itemCount: filteredShops.length, 
-                        itemBuilder: (context, index) { 
-                          final shop = filteredShops[index]; 
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 12), padding: const EdgeInsets.all(15), 
-                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(22), border: Border.all(color: kBorderGrey.withOpacity(0.65)), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 15, offset: const Offset(0, 5))]), 
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start, 
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(width: 44, height: 44, alignment: Alignment.center, decoration: BoxDecoration(color: const Color(0xFFEEF2FF), borderRadius: BorderRadius.circular(14)), child: const Icon(Icons.local_laundry_service_rounded, color: kPremiumIndigo, size: 22)), 
-                                    const SizedBox(width: 11), 
-                                    Expanded(child: Text(shop['name'] ?? 'Laundry Shop', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900))), 
-                                    Container(padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6), decoration: BoxDecoration(color: const Color(0xFFEEF2FF), borderRadius: BorderRadius.circular(10)), child: Text(shop['distance'] ?? 'N/A', style: const TextStyle(color: kPremiumIndigo, fontWeight: FontWeight.w900, fontSize: 11)))
-                                  ]
-                                ), 
-                                const SizedBox(height: 11), 
-                                Row(
-                                  children: [
-                                    const Icon(Icons.location_on_outlined, size: 17, color: kTextGrey), 
-                                    const SizedBox(width: 7), 
-                                    Expanded(child: Text(shop['address'] ?? '', maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: kTextGrey, fontSize: 12, fontWeight: FontWeight.w600)))
-                                  ]
-                                ), 
-                                const SizedBox(height: 7), 
-                                Row(
-                                  children: [
-                                    const Icon(Icons.phone_outlined, size: 17, color: kTextGrey), 
-                                    const SizedBox(width: 7), 
-                                    Text(shop['phone'] ?? 'Not available', style: const TextStyle(color: kTextGrey, fontSize: 12, fontWeight: FontWeight.w600))
-                                  ]
-                                ), 
-                                const SizedBox(height: 13), 
-                                SizedBox(
-                                  width: double.infinity, height: 49, 
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(backgroundColor: kPremiumBlack), 
-                                    onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => LaundryTrackingScreen(shopData: shop))); }, 
-                                    child: const Text('Book Wash Pickup', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white))
+              ),
+              const SizedBox(height: 24),
+              
+              // Grid Title
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(color: kPremiumIndigo.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
+                child: const Text('CHOOSE A SERVICE', style: TextStyle(fontSize: 10, color: kPremiumIndigo, fontWeight: FontWeight.w900, letterSpacing: 1.2)),
+              ),
+              const SizedBox(height: 6),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('What do you need?', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: kPremiumBlack)),
+                  Text('View all', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: kPremiumGreen.withOpacity(0.8))),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              // Service Grid
+              GridView.count(
+                shrinkWrap: true, 
+                physics: const NeverScrollableScrollPhysics(), 
+                crossAxisCount: 2, 
+                crossAxisSpacing: 12, 
+                mainAxisSpacing: 12, 
+                childAspectRatio: 1.35, 
+                children: [
+                  _buildLaundryServiceCard('Wash & Fold', 'Everyday wear', Icons.checkroom_rounded),
+                  _buildLaundryServiceCard('Dry Cleaning', 'Premium care', Icons.dry_cleaning_rounded),
+                  _buildLaundryServiceCard('Ironing', 'Crisp & neat', Icons.local_laundry_service_rounded),
+                  _buildLaundryServiceCard('Home Linen', 'Bedding & more', Icons.bed_rounded),
+                ],
+              ),
+              const SizedBox(height: 24),
+
+              // Promo Banner
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF065F46),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(6)),
+                      child: const Text('FIRST ORDER', style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.0)),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text('Fresh clothes, less work.', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900)),
+                    const SizedBox(height: 4),
+                    Text('Get 30% off your first laundry pickup.', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12, fontWeight: FontWeight.w500)),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        // ✨ Navigate to the new UI screen ✨
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const LaundryPickupTaskScreen()));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: const Color(0xFF065F46),
+                        minimumSize: const Size(120, 38),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: const Text('Book a pickup', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12)),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Popular Near You List
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Popular near you', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: kPremiumBlack)),
+                  Text('${filteredShops.length} places', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: kTextGrey)),
+                ],
+              ),
+              const SizedBox(height: 16),
+              
+              if (isLoading) 
+                const Padding(padding: EdgeInsets.only(top: 20), child: Center(child: CircularProgressIndicator(color: kPremiumIndigo))) 
+              else if (realShops.isEmpty) 
+                _buildEmptyState('No shops found nearby', 'Try changing your pickup location on the home screen.') 
+              else if (filteredShops.isEmpty) 
+                _buildEmptyState('No match found', "We couldn't find any shop matching your search.") 
+              else 
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.only(bottom: 40), 
+                  itemCount: filteredShops.length, 
+                  itemBuilder: (context, index) { 
+                    final shop = filteredShops[index]; 
+                    return GestureDetector(
+                      onTap: () { Navigator.push(context, MaterialPageRoute(builder: (context) => LaundryTrackingScreen(shopData: shop))); },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 12), 
+                        padding: const EdgeInsets.all(16), 
+                        decoration: BoxDecoration(
+                          color: Colors.white, 
+                          borderRadius: BorderRadius.circular(20), 
+                          border: Border.all(color: kBorderGrey.withOpacity(0.8)), 
+                          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))]
+                        ), 
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 52, height: 52, alignment: Alignment.center, 
+                              decoration: BoxDecoration(color: const Color(0xFFECFDF5), borderRadius: BorderRadius.circular(14)), 
+                              child: const Icon(Icons.local_laundry_service_rounded, color: kPremiumGreen, size: 26)
+                            ), 
+                            const SizedBox(width: 14), 
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(shop['name'] ?? 'Laundry Shop', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900)),
+                                  const SizedBox(height: 4),
+                                  Text(shop['address'] ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: kTextGrey, fontSize: 12, fontWeight: FontWeight.w500)),
+                                  const SizedBox(height: 6),
+                                  Row(
+                                    children: [
+                                      Text('$_selectedService • ', style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: kTextGrey)),
+                                      const Text('₹75/kg', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: kPremiumGreen)),
+                                    ],
                                   )
-                                )
-                              ]
+                                ],
+                              )
+                            ), 
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4), 
+                                  decoration: BoxDecoration(color: kPremiumGreen, borderRadius: BorderRadius.circular(6)), 
+                                  child: const Row(
+                                    children: [
+                                      Text('4.8', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 11)),
+                                      SizedBox(width: 2),
+                                      Icon(Icons.star_rounded, color: Colors.white, size: 10)
+                                    ],
+                                  )
+                                ),
+                                const SizedBox(height: 12),
+                                Text(shop['distance'] ?? 'N/A', style: const TextStyle(color: kTextGrey, fontWeight: FontWeight.w800, fontSize: 11))
+                              ],
                             )
-                          ); 
-                        }
-                      )
-            )
-          ]
+                          ]
+                        )
+                      ),
+                    ); 
+                  }
+                )
+            ]
+          )
         )
       )
     );
@@ -2326,6 +2679,291 @@ class _RideHistoryScreenState extends State<RideHistoryScreen> {
                 ); 
               }
             )
+    );
+  }
+}
+
+// ==========================================
+// 👕 11. LAUNDRY PICKUP TASK SCREEN
+// ==========================================
+class LaundryPickupTaskScreen extends StatefulWidget {
+  const LaundryPickupTaskScreen({super.key});
+
+  @override
+  State<LaundryPickupTaskScreen> createState() => _LaundryPickupTaskScreenState();
+}
+
+class _LaundryPickupTaskScreenState extends State<LaundryPickupTaskScreen> {
+  String _pickupAddress = "Current Location"; // Default Address
+  String _dropAddress = "Cocoab Care Laundry, 2nd...";
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F8FA),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black, size: 20),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Top Progress Tracker
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              child: Row(
+                children: [
+                  _buildStepCircle('1', 'Pickup', isActive: true),
+                  Expanded(child: Container(height: 2, color: Colors.grey.shade300)),
+                  _buildStepCircle('2', 'Verify', isActive: false),
+                  Expanded(child: Container(height: 2, color: Colors.grey.shade300)),
+                  _buildStepCircle('3', 'Delivery', isActive: false),
+                ],
+              ),
+            ),
+
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    // Main Card
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4))],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(color: const Color(0xFFECFDF5), borderRadius: BorderRadius.circular(6)),
+                            child: const Text('PICKUP BY 10:30 AM', style: TextStyle(color: kPremiumGreen, fontSize: 10, fontWeight: FontWeight.w900)),
+                          ),
+                          const SizedBox(height: 12),
+                          const Text('Laundry pickup &\ndelivery', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: kPremiumBlack, height: 1.2)),
+                          const SizedBox(height: 6),
+                          Text('Collect, verify and deliver to the laundry', style: TextStyle(color: Colors.grey.shade600, fontSize: 13, fontWeight: FontWeight.w500)),
+                          
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Divider(height: 1, thickness: 1, color: Color(0xFFF0F0F0)),
+                          ),
+
+                          // Customer Row
+                          Row(
+                            children: [
+                              Container(
+                                width: 40, height: 40,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(color: Colors.grey.shade200, shape: BoxShape.circle),
+                                child: const Text('AK', style: TextStyle(fontWeight: FontWeight.w800, color: Colors.black87)),
+                              ),
+                              const SizedBox(width: 12),
+                              const Expanded(child: Text('Arun Kumar', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(20)),
+                                child: const Row(
+                                  children: [
+                                    Icon(Icons.checkroom_rounded, size: 14, color: Colors.black87),
+                                    SizedBox(width: 4),
+                                    Text('8 clothes', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.black87))
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Divider(height: 1, thickness: 1, color: Color(0xFFF0F0F0)),
+                          ),
+
+                          // Location Timeline
+                          IntrinsicHeight(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  children: [
+                                    const Icon(Icons.arrow_upward_rounded, size: 16, color: kPremiumBlack),
+                                    Expanded(child: Container(width: 2, color: Colors.grey.shade300, margin: const EdgeInsets.symmetric(vertical: 4))),
+                                    const Icon(Icons.store_rounded, size: 16, color: Colors.grey),
+                                  ],
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text('PICKUP - CUSTOMER', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.grey)),
+                                      const SizedBox(height: 4),
+                                      // ✨ Pickup with (+) Icon ✨
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(_pickupAddress, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: kPremiumBlack)),
+                                          ),
+                                          IconButton(
+                                            padding: EdgeInsets.zero,
+                                            constraints: const BoxConstraints(),
+                                            icon: const Icon(Icons.add_circle_outline, color: Colors.black54, size: 20),
+                                            onPressed: () async {
+                                              final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationSearchScreen(pickupAddress: _pickupAddress, pickupLatLng: LocationState.current.value.pickup)));
+                                              if (result != null) {
+                                                setState(() {
+                                                  _pickupAddress = result['dropoffName'];
+                                                });
+                                              }
+                                            }
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text('Anna Nagar • 1.2 km from shop', style: TextStyle(fontSize: 12, color: Colors.grey.shade500, fontWeight: FontWeight.w500)),
+                                      
+                                      const SizedBox(height: 24),
+                                      
+                                      const Text('DELIVERY - LAUNDRY SHOP', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.grey)),
+                                      const SizedBox(height: 4),
+                                      // ✨ Dropoff with (+) Icon ✨
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(_dropAddress, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: kPremiumBlack)),
+                                          ),
+                                          IconButton(
+                                            padding: EdgeInsets.zero,
+                                            constraints: const BoxConstraints(),
+                                            icon: const Icon(Icons.add_circle_outline, color: Colors.black54, size: 20),
+                                            onPressed: () async {
+                                              final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => DestinationSearchScreen(pickupAddress: _pickupAddress, pickupLatLng: LocationState.current.value.pickup)));
+                                              if (result != null) {
+                                                setState(() {
+                                                  _dropAddress = result['dropoffName'];
+                                                });
+                                              }
+                                            }
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text('Anna Nagar • 2.8 km from pickup', style: TextStyle(fontSize: 12, color: Colors.grey.shade500, fontWeight: FontWeight.w500)),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Photo Verification Box
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFECFDF5),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: const Color(0xFF10B981)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(Icons.photo_camera_front_rounded, color: kPremiumGreen, size: 20),
+                              SizedBox(width: 8),
+                              Text('Photo verification', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: kPremiumGreen)),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Text('Place all clothes in one frame and take a clear photo before picking up.', style: TextStyle(fontSize: 12, color: Colors.green.shade800, fontWeight: FontWeight.w500)),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: double.infinity, height: 48,
+                            child: OutlinedButton.icon(
+                              onPressed: () {},
+                              icon: const Icon(Icons.camera_alt_outlined, size: 18),
+                              label: const Text('Take pickup photo', style: TextStyle(fontWeight: FontWeight.w800)),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: kPremiumGreen,
+                                side: const BorderSide(color: kPremiumGreen, width: 1.5),
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                  ],
+                ),
+              ),
+            ),
+
+            // Bottom Action Button
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 20, offset: const Offset(0, -5))],
+              ),
+              child: SizedBox(
+                width: double.infinity, height: 56,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: kPremiumBlack,
+                    side: const BorderSide(color: kBorderGrey, width: 1.5),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Start delivery to laundry shop', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                      SizedBox(width: 8),
+                      Icon(Icons.arrow_forward_rounded, size: 18),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStepCircle(String step, String label, {required bool isActive}) {
+    return Column(
+      children: [
+        Container(
+          width: 28, height: 28,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: isActive ? kPremiumGreen : Colors.grey.shade200,
+            shape: BoxShape.circle,
+          ),
+          child: Text(step, style: TextStyle(color: isActive ? Colors.white : Colors.grey.shade600, fontWeight: FontWeight.w900, fontSize: 12)),
+        ),
+        const SizedBox(height: 6),
+        Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: isActive ? kPremiumBlack : Colors.grey.shade500)),
+      ],
     );
   }
 }
