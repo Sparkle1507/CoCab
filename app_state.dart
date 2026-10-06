@@ -7,13 +7,21 @@ import 'dart:convert';
 
 class AppState {
   static final ValueNotifier<bool> isLoggedIn = ValueNotifier(false);
+  static final ValueNotifier<bool> hasSeenOnboarding = ValueNotifier(false); // ✨ Pudhusa add panniyachu
   static final ValueNotifier<String> userPhone = ValueNotifier("+91 9876543210");
   static final ValueNotifier<bool> showBottomNav = ValueNotifier(true); 
 
   static Future<void> checkLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isLoggedIn.value = prefs.getBool('isLoggedIn') ?? false;
+    hasSeenOnboarding.value = prefs.getBool('hasSeenOnboarding') ?? false; // ✨ Memory la irundhu check pandrom
     userPhone.value = prefs.getString('userPhone') ?? "+91 9876543210";
+  }
+
+  static Future<void> completeOnboarding() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('hasSeenOnboarding', true); // ✨ User paathutaanga nu save pandrom
+    hasSeenOnboarding.value = true;
   }
 
   static Future<void> login(String phone) async {
@@ -33,6 +41,7 @@ class AppState {
   }
 }
 
+// ... LocationData and LocationState remains same ...
 class LocationData {
   final LatLng pickup;
   final String address;

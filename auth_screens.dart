@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme.dart';
 import '../../../core/app_state.dart';
-
+import '../../../navigation/main_navigation_screen.dart'; // ✨ Idhava pudhusa add pannu
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
   @override
@@ -149,7 +149,17 @@ class OtpScreen extends StatelessWidget {
             SizedBox(
               height: 56, 
               child: ElevatedButton(
-                onPressed: () async { await AppState.login(phone); Navigator.pop(context); }, 
+                onPressed: () async { 
+  await AppState.login(phone); 
+  if (context.mounted) {
+    // ✨ Pazhaya screens ellathaiyum delete pannittu direct-a Home-ku porom!
+    Navigator.pushAndRemoveUntil(
+      context, 
+      MaterialPageRoute(builder: (context) => const MainNavigationScreen()), 
+      (route) => false
+    );
+  }
+}, 
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: kPremiumBlack), 
                 child: const Text('Confirm & Continue', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16))
               )

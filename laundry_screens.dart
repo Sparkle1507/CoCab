@@ -78,7 +78,7 @@ class _LaundryShopsScreenState extends State<LaundryShopsScreen> {
           children: [
             const Icon(Icons.local_laundry_service_outlined, size: 80, color: kBorderGrey),
             const SizedBox(height: 16),
-            Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: kPremiumBlack), textAlign: TextAlign.center),
+            Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Color.fromARGB(255, 0, 0, 0)), textAlign: TextAlign.center),
             const SizedBox(height: 8),
             Text(subtitle, style: const TextStyle(fontSize: 14, color: kTextGrey, fontWeight: FontWeight.w500), textAlign: TextAlign.center),
           ],
@@ -136,7 +136,7 @@ class _LaundryShopsScreenState extends State<LaundryShopsScreen> {
                   color: Colors.white, 
                   borderRadius: BorderRadius.circular(18),
                   border: Border.all(color: Colors.grey.shade200, width: 1.5), 
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 8, offset: const Offset(0, 3))], 
+                  boxShadow: [BoxShadow(color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.02), blurRadius: 8, offset: const Offset(0, 3))], 
                 ),
                 child: TextField(
                   controller: _searchController, 
