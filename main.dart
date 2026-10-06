@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart'; // ✨ Google Fonts Import
 
 import 'core/theme.dart';
 import 'core/app_state.dart';
-import 'features/auth/screens/auth_screens.dart'; // Uncommented
-import 'navigation/main_navigation_screen.dart';   // Uncommented
+import 'features/auth/screens/auth_screens.dart'; 
+import 'navigation/main_navigation_screen.dart';  
+import 'features/onboarding/screens/onboarding_screens.dart'; 
 
 bool isFirebaseWorking = false;
 
@@ -39,7 +41,10 @@ class CabApp extends StatelessWidget {
             useMaterial3: true,
             primaryColor: kPremiumIndigo,
             scaffoldBackgroundColor: kBackgroundLight,
-            fontFamily: 'Roboto',
+            
+            // ✨ PUDHU CODE: App full-a Poppins font apply aagum ✨
+            textTheme: GoogleFonts.poppinsTextTheme(), 
+            
             colorScheme: ColorScheme.fromSeed(seedColor: kPremiumIndigo, brightness: Brightness.light),
             appBarTheme: const AppBarTheme(
               elevation: 0,
@@ -82,7 +87,9 @@ class CabApp extends StatelessWidget {
               contentTextStyle: const TextStyle(fontWeight: FontWeight.w700),
             ),
           ),
-          home: isLoggedIn ? const MainNavigationScreen() : const LoginScreen(), // Final Screen Setup!
+          home: isLoggedIn 
+              ? const MainNavigationScreen() 
+              : const SplashAnimationScreen(),  
         );
       }
     );
